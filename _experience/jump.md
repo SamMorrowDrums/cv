@@ -7,4 +7,3 @@ location: 'London / Amsterdam'
 link: 'https://jump.work'
 ---
 
-As a senior full-stack developer at Jump I have been responsible for overseeing everything.

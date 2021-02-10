@@ -1,11 +1,12 @@
 import Experience from "../components/Experience";
 import { getAllExperiences } from "../lib/api";
+import markdownToHtml from "../lib/markDownToHtml";
 import Head from "next/head";
 
 export default function Home({ experiences }) {
   return (
     <div className="bg-gray-100 min-h-screen pb-32 px-4 sm:px-16">
-      <div class="container mx-auto font-sans">
+      <div className="container mx-auto font-sans">
         <Head>
           <title>Sam Morrow</title>
           <link rel="icon" href="/favicon.ico" />
@@ -54,7 +55,7 @@ export default function Home({ experiences }) {
 }
 
 export async function getStaticProps() {
-  const experiences = getAllExperiences([
+  const exp = await getAllExperiences([
     "company",
     "position",
     "fromDate",
@@ -64,6 +65,12 @@ export async function getStaticProps() {
     "content",
   ]);
 
+  const experiences = [];
+
+  for (let i = 0; i < exp.length; i++) {
+    const content = await markdownToHtml(exp[i].content || "");
+    experiences.push({ ...exp[i], content });
+  }
   return {
     props: { experiences },
   };

@@ -16,3 +16,12 @@
 .markdown h3 {
     @apply text-2xl mt-8 mb-4 leading-snug;
 }
+
+.markdown ul {
+    margin-left: 15px
+}
+
+.markdown li {
+    list-style-type: circle;
+    padding-inline-start: 1ch;
+}

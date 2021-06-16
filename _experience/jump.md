@@ -2,7 +2,7 @@
 company: 'Jump'
 position: 'Senior Software Engineer'
 fromDate: '2017-08-11T00:00:00.000Z'
-toDate: ''
+toDate: '2021-07-11T00:00:00.000Z'
 location: 'London / Amsterdam'
 link: 'https://jump.work'
 ---

@@ -43,7 +43,7 @@ export default function Home({ experiences, projects }) {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Github
+                  GitHub
                 </a>
               </li>
             </ul>

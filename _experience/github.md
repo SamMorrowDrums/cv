@@ -7,4 +7,4 @@ location: 'Amsterdam'
 link: 'https://github.com'
 ---
 
-I help to secure the worlds code, developing the Code Scanning feature for GitHub Enterprise, ensuring that as many vulnerabilities as possible are caught prior to merging pull requests, catching them before users release the vulnerable code. The main languages involved in my role are Golang, TypeScript and Ruby, and I will add further details once I am a little further along in my journey with GitHub.
+I help to secure the worlds code, developing the Code Scanning feature for GitHub, ensuring that as many vulnerabilities as possible are caught prior to merging pull requests, catching them before users release the vulnerable code. The main languages involved in my role are Golang, Ruby and TypeScript, and I have been working on a wide range of features such as public APIs, tooling and internal usage of Codespaces, collaborating with the Copilot team, UI work and writing ADRs helping to inform the architectural decisions my team makes.

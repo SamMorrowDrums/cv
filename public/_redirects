@@ -1,0 +1,11 @@
+# Netlify redirects for handling static files with query parameters
+# This ensures URLs with query parameters work correctly with static HTML files
+
+# Blog post routes - handle /blog/slug?params -> /blog/slug.html
+/blog/:slug  /blog/:slug.html  200
+
+# Blog index route - handle /blog?params -> /blog.html  
+/blog  /blog.html  200
+
+# Home route - handle /?params -> /index.html
+/  /index.html  200

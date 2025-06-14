@@ -68,6 +68,8 @@ export default function SEO({
       
       {/* Twitter */}
       <meta name="twitter:card" content={twitterCard} />
+      <meta name="twitter:site" content="@SamMorrowDrums" />
+      <meta name="twitter:creator" content="@SamMorrowDrums" />
       <meta name="twitter:url" content={fullUrl} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />

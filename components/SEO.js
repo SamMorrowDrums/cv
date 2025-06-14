@@ -16,21 +16,13 @@ export default function SEO({
   const fullImageUrl = image.startsWith('http') ? image : `https://sam-morrow.com${image}`;
   
   // Generate rectangular and square image URLs for better social media coverage
-  const isApiImage = image.includes('/api/og-image') || (!image.startsWith('http') && !image.startsWith('/'));
-  const rectangularImageUrl = isApiImage ? 
-    `https://sam-morrow.com/api/og-image?title=${encodeURIComponent(title)}&format=rectangular` : 
-    fullImageUrl;
+  // Since we're using static export, all images should be static files
+  const rectangularImageUrl = fullImageUrl;
   
-  // For square images, we need to handle both API and static images differently
-  let squareImageUrl;
-  if (isApiImage) {
-    squareImageUrl = `https://sam-morrow.com/api/og-image?title=${encodeURIComponent(title)}&format=square`;
-  } else {
-    // For static images, try to find the square version by adding -square suffix
-    const imageExtension = fullImageUrl.lastIndexOf('.') > -1 ? fullImageUrl.substring(fullImageUrl.lastIndexOf('.')) : '.png';
-    const imageBase = fullImageUrl.substring(0, fullImageUrl.lastIndexOf('.') > -1 ? fullImageUrl.lastIndexOf('.') : fullImageUrl.length);
-    squareImageUrl = `${imageBase}-square${imageExtension}`;
-  }
+  // For square images, try to find the square version by adding -square suffix
+  const imageExtension = fullImageUrl.lastIndexOf('.') > -1 ? fullImageUrl.substring(fullImageUrl.lastIndexOf('.')) : '.png';
+  const imageBase = fullImageUrl.substring(0, fullImageUrl.lastIndexOf('.') > -1 ? fullImageUrl.lastIndexOf('.') : fullImageUrl.length);
+  const squareImageUrl = `${imageBase}-square${imageExtension}`;
 
   // JSON-LD structured data for better social media and search engine recognition
   const structuredData = type === 'article' && author && publishedTime ? {
@@ -54,7 +46,24 @@ export default function SEO({
       "@type": "WebPage",
       "@id": fullUrl
     }
-  } : null;
+  } : {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": fullTitle,
+    "description": description,
+    "url": fullUrl,
+    "image": [rectangularImageUrl, squareImageUrl],
+    "author": {
+      "@type": "Person",
+      "name": "Sam Morrow",
+      "url": "https://sam-morrow.com"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Sam Morrow",
+      "url": "https://sam-morrow.com"
+    }
+  };
 
   return (
     <Head>
@@ -113,14 +122,12 @@ export default function SEO({
 
       
       {/* JSON-LD structured data for better recognition */}
-      {structuredData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData)
-          }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
+      />
       
       {/* Additional meta tags for better SEO */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />

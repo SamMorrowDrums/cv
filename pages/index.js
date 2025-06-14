@@ -7,6 +7,7 @@ import {
 } from "../lib/api";
 import markdownToHtml from "../lib/markDownToHtml";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function Home({ experiences, projects }) {
   return (
@@ -29,13 +30,9 @@ export default function Home({ experiences, projects }) {
           <section className="place-self-center mt-4 mb-20">
             <ul className="text-xl md:text-2xl text-blue-500">
               <li className="inline mx-4">
-                <a
-                  href="https://sammorrowdrums.com"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Blog
-                </a>
+                <Link href="/blog">
+                  <a>Blog</a>
+                </Link>
               </li>
               <li className="inline mx-4">
                 <a

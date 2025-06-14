@@ -1,6 +1,6 @@
 ---
 title: "AI Won't Make Your Job Easier—so what will it do?"
-date: '2024-01-15T00:00:00.000Z'
+date: '2025-06-14T00:00:00.000Z'
 slug: 'ai-wont-make-your-job-easier'
 ---
 

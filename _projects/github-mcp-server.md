@@ -8,14 +8,14 @@ The GitHub MCP Server is a Model Context Protocol (MCP) server that provides sea
 
 ## Key Features
 
-- **Comprehensive GitHub API Integration**: Provides access to repositories, issues, pull requests, and more through a standardized protocol
-- **Advanced Automation**: Enables sophisticated workflows and process automation across GitHub's ecosystem
-- **Developer-Friendly**: Designed with developers in mind, offering intuitive interfaces and robust functionality
+- **Comprehensive GitHub API Integration**: Access to repositories, issues, pull requests, and more
+- **Advanced Automation**: Sophisticated workflows and process automation
+- **Developer-Friendly**: Intuitive interfaces and robust functionality
 
 ## Use Cases
 
-- **Automating GitHub workflows and processes**: Streamline repetitive tasks and create efficient development pipelines
-- **Extracting and analyzing data from GitHub repositories**: Gain insights from repository metrics, code patterns, and development trends  
-- **Building AI-powered tools and applications**: Create intelligent solutions that interact seamlessly with GitHub's ecosystem
+- **Automating GitHub workflows**: Streamline repetitive tasks and development pipelines
+- **Repository data analysis**: Extract insights from metrics, code patterns, and trends
+- **AI-powered tool development**: Build intelligent solutions for GitHub's ecosystem
 
-Leading development of this project involves architecting scalable solutions, collaborating with cross-functional teams, and ensuring the server meets the diverse needs of developers and organizations leveraging GitHub's platform.
+Leading development of this project involves deeply understanding how AI agents can leverage GitHub's platform seamlessly and enable both developers and other users of the platform to experience AI agents that just know how to do it all. This is a constant challenge, and not something that will ever be done, but it leads to some very exciting development opportunities and amazing collaboration with open source contributors to the project.

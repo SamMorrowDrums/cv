@@ -49,6 +49,7 @@ module.exports = {
         "float": "float 6s ease-in-out infinite",
         "glow": "glow 2s ease-in-out infinite alternate",
         "slide-up": "slideUp 0.5s ease-out",
+        "blink": "blink 1s ease-in-out infinite",
       },
       keyframes: {
         float: {
@@ -62,6 +63,10 @@ module.exports = {
         slideUp: {
           "0%": { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0px)", opacity: "1" },
+        },
+        blink: {
+          "0%, 50%": { opacity: "1" },
+          "51%, 100%": { opacity: "0" },
         },
       },
     },

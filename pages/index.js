@@ -11,12 +11,12 @@ import Link from "next/link";
 
 export default function Home({ experiences, projects }) {
   return (
-    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen relative overflow-hidden">
+    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen relative overflow-hidden tech-grid">
       {/* Subtle animated background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-tech-blue rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-tech-purple rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-20 left-40 w-56 h-56 bg-tech-teal rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
+      <div className="absolute inset-0 opacity-5 md:opacity-10">
+        <div className="absolute top-20 left-20 w-32 h-32 md:w-64 md:h-64 bg-tech-blue rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
+        <div className="absolute top-40 right-20 w-36 h-36 md:w-72 md:h-72 bg-tech-purple rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-20 left-40 w-28 h-28 md:w-56 md:h-56 bg-tech-teal rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
@@ -32,15 +32,16 @@ export default function Home({ experiences, projects }) {
               <span className="bg-gradient-to-r from-neon-blue via-neon-purple to-neon-teal bg-clip-text text-transparent">
                 Sam Morrow
               </span>
+              <span className="text-neon-blue animate-blink ml-2">|</span>
             </h1>
 
             <p className="text-2xl md:text-3xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
               Drummer, <span className="text-tech-blue font-semibold">software engineer</span> and <span className="text-tech-teal font-semibold">online-learning fanatic</span>.
             </p>
 
-            <nav className="flex justify-center space-x-8">
+            <nav className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
               <Link href="/blog">
-                <a className="group relative px-8 py-4 text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-md">
+                <a className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-md w-full sm:w-auto text-center">
                   <span className="relative z-10">Blog</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
                 </a>
@@ -49,7 +50,7 @@ export default function Home({ experiences, projects }) {
                 href="https://github.com/sammorrowdrums"
                 rel="noopener noreferrer"
                 target="_blank"
-                className="group relative px-8 py-4 text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-teal to-tech-emerald hover:from-neon-teal hover:to-tech-emerald transform hover:scale-105 hover:shadow-glow-md"
+                className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-teal to-tech-emerald hover:from-neon-teal hover:to-tech-emerald transform hover:scale-105 hover:shadow-glow-md w-full sm:w-auto text-center"
               >
                 <span className="relative z-10">GitHub</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-tech-teal to-tech-emerald rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>

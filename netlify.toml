@@ -33,3 +33,23 @@
   for = "/og-images/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
+
+# Handle static files with query parameters
+# Redirect routes with query parameters to their static equivalents
+[[redirects]]
+  from = "/blog/:slug"
+  to = "/blog/:slug.html"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/blog"
+  to = "/blog.html"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+  force = false

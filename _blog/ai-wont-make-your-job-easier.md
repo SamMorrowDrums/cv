@@ -22,7 +22,7 @@ Truly excellent work—work that demonstrates deep understanding, thoughtful jud
 
 This isn't just about working harder or faster. It's about the nature and quality of what we produce, and redefining what our best work is.
 
-> Something | told 16 yo: In the near term, Al will increase variation in the returns for work. For example, mediocre programmers are now finding it hard even to get hired, but great programmers are making more than ever.
+> Something I told 16 yo: In the near term, AI will increase variation in the returns for work. For example, mediocre programmers are now finding it hard even to get hired, but great programmers are making more than ever.
 
 > Something else I told him: This is a trend that has been going since the stone age. Technology always increases variation in the returns for work. The bottom end is anchored at zero. Technology lets the top end move.
 

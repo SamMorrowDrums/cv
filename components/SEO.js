@@ -32,6 +32,30 @@ export default function SEO({
     squareImageUrl = `${imageBase}-square${imageExtension}`;
   }
 
+  // JSON-LD structured data for better social media and search engine recognition
+  const structuredData = type === 'article' && author && publishedTime ? {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": fullTitle,
+    "description": description,
+    "image": [rectangularImageUrl, squareImageUrl],
+    "datePublished": publishedTime,
+    "author": {
+      "@type": "Person",
+      "name": author,
+      "url": "https://sam-morrow.com"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Sam Morrow",
+      "url": "https://sam-morrow.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": fullUrl
+    }
+  } : null;
+
   return (
     <Head>
       <title>{fullTitle}</title>
@@ -46,12 +70,14 @@ export default function SEO({
       
       {/* Primary rectangular image for best compatibility */}
       <meta property="og:image" content={rectangularImageUrl} />
+      <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={fullTitle} />
       
       {/* Square image for better social media coverage */}
       <meta property="og:image" content={squareImageUrl} />
+      <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="1200" />
       <meta property="og:image:alt" content={fullTitle} />
@@ -60,7 +86,10 @@ export default function SEO({
       
       {/* Article-specific metadata for blog posts */}
       {type === 'article' && author && (
-        <meta property="article:author" content={author} />
+        <>
+          <meta property="article:author" content={author} />
+          <meta name="author" content={author} />
+        </>
       )}
       {type === 'article' && publishedTime && (
         <meta property="article:published_time" content={publishedTime} />
@@ -74,7 +103,21 @@ export default function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={rectangularImageUrl} />
+      <meta name="twitter:image:width" content="1200" />
+      <meta name="twitter:image:height" content="630" />
       <meta name="twitter:image:alt" content={fullTitle} />
+      
+
+      
+      {/* JSON-LD structured data for better recognition */}
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData)
+          }}
+        />
+      )}
       
       {/* Additional meta tags for better SEO */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -16,7 +16,7 @@ I've come to a different conclusion, which I think is more honest: AI probably w
 
 When powerful AI tools become widely accessible, something interesting happens to the value of work.
 
-Standard, good-enough output becomes abundant. Whether it's code, writing, or analysis, the baseline of acceptable is easier for everyone to reach. This also means that simply meeting that baseline is no longer a differentiator, worse than that it's almost indistinguishable from the noise floor of AI slop that people are already cursing the internet with. Tasks AI can do excellently autonomously, should be offloaded to AI, so what what is left?
+Standard, good-enough output becomes abundant. Whether it's code, writing, or analysis, the baseline of acceptable is easier for everyone to reach. This also means that simply meeting that baseline is no longer a differentiator, worse than that it's almost indistinguishable from the noise floor of AI slop that people are already cursing the internet with. Tasks AI can do excellently autonomously, should be offloaded to AI, so what is left?
 
 Truly excellent work—work that demonstrates deep understanding, thoughtful judgment, or unique insight—becomes necessary to stand out from the new noise floor.
 

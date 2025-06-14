@@ -2,6 +2,7 @@
 const nextConfig = {
   // Configure for better static generation
   trailingSlash: false,
+  output: 'export',
   // Ensure proper static generation
   generateEtags: false,
   poweredByHeader: false,
@@ -13,30 +14,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Configure for better SEO
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
 }
 
-module.exports = nextConfig
-
-module.exports = nextConfig
+module.exports = nextConfig;

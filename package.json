@@ -7,7 +7,7 @@
     "build": "npm run generate-og-images && next build",
     "build:fallback": "next build",
     "build:with-images": "node scripts/generate-og-images.mjs && next build",
-    "build:export": "npm run generate-og-images && next build && next export",
+    "build:export": "npm run generate-og-images && next build",
     "generate-og-images": "node scripts/generate-og-images.mjs",
     "start": "next start"
   },

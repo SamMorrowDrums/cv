@@ -6,6 +6,13 @@
   NODE_VERSION = "18"
   NPM_FLAGS = "--production=false"
 
+# Ensure static HTML files are served correctly
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Type = "text/html; charset=utf-8"
+
 # Ensure proper redirects and headers for static files
 [[headers]]
   for = "/*"

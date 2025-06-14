@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
 
 // Helper function to wrap text intelligently for OpenGraph images
 function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
@@ -153,7 +153,7 @@ async function generateAllOGImages() {
   }
   
   try {
-    // Dynamically import the ES6 module
+    // Import the ES6 module
     const { getAllBlogPosts } = await import('../lib/api.js');
     
     // Get all blog posts
@@ -181,8 +181,6 @@ async function generateAllOGImages() {
 }
 
 // Run the script
-if (require.main === module) {
-  generateAllOGImages();
-}
+generateAllOGImages();
 
-module.exports = { generateAllOGImages, generateOGImage };
+export { generateAllOGImages, generateOGImage };

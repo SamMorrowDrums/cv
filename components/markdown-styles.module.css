@@ -1,5 +1,5 @@
 .markdown {
-    @apply text-xl leading-relaxed text-slate-700 font-medium;
+    @apply text-xl leading-relaxed text-slate-300 font-medium;
 }
 
 .markdown p,
@@ -14,11 +14,11 @@
 }
 
 .markdown h2 {
-    @apply text-3xl font-black mt-10 mb-6 leading-snug text-slate-900 tracking-tight;
+    @apply text-3xl font-black mt-10 mb-6 leading-snug text-white tracking-tight;
 }
 
 .markdown h3 {
-    @apply text-2xl font-bold mt-8 mb-4 leading-snug text-slate-900 tracking-tight;
+    @apply text-2xl font-bold mt-8 mb-4 leading-snug text-white tracking-tight;
 }
 
 .markdown ul {
@@ -26,16 +26,16 @@
 }
 
 .markdown li {
-    @apply list-disc text-slate-700 text-lg;
+    @apply list-disc text-slate-300 text-lg;
     padding-inline-start: 0.75ch;
 }
 
 .markdown strong {
-    @apply font-bold text-slate-900;
+    @apply font-bold text-white;
 }
 
 .markdown a {
-    @apply text-blue-700 hover:text-blue-900 transition-all duration-300 font-semibold border-b-2 border-transparent hover:border-blue-700 hover:bg-blue-50/80 px-1 py-0.5 rounded;
+    @apply text-tech-blue hover:text-neon-blue transition-all duration-300 font-semibold border-b-2 border-transparent hover:border-tech-blue hover:bg-tech-blue/10 px-1 py-0.5 rounded;
 }
 
 .markdown a:hover {
@@ -43,9 +43,9 @@
 }
 
 .markdown code {
-    @apply bg-slate-100 text-slate-800 px-3 py-1.5 rounded-lg text-lg font-mono font-semibold border border-slate-200;
+    @apply bg-tech-slate text-tech-blue px-3 py-1.5 rounded-lg text-lg font-mono font-semibold border border-white/10;
 }
 
 .markdown blockquote {
-    @apply border-l-4 border-blue-400 pl-6 italic text-slate-600 bg-blue-50/50 py-4 rounded-r-lg;
+    @apply border-l-4 border-tech-blue pl-6 italic text-slate-400 bg-tech-blue/10 py-4 rounded-r-lg border border-white/10;
 }

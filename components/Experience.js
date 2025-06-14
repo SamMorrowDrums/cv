@@ -11,24 +11,26 @@ export default function Experience({
   content,
 }) {
   return (
-    <article className="bg-white/90 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/60 group">
+    <article className="glass-morphism backdrop-blur-md border border-white/20 rounded-2xl p-10 shadow-tech hover:shadow-tech-hover transition-all duration-500 hover:scale-[1.02] hover:border-tech-blue/40 group hover-glow">
       <header className="mb-8">
-        <h3 className="text-3xl lg:text-4xl font-black text-slate-900 mb-4 leading-tight tracking-tight group-hover:text-blue-700 transition-colors duration-300">
-          {position} |{" "}
+        <h3 className="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight tracking-tight group-hover:text-tech-blue transition-colors duration-300 text-shadow-sm">
+          <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent group-hover:from-tech-blue group-hover:to-neon-blue">
+            {position}
+          </span> |{" "}
           <a 
             href={link}
-            className="text-blue-700 hover:text-blue-900 transition-all duration-300 border-b-3 border-transparent hover:border-blue-700 hover:bg-blue-50/80 px-2 py-1 rounded-lg"
+            className="text-tech-blue hover:text-neon-blue transition-all duration-300 border-b-3 border-transparent hover:border-tech-blue hover:bg-tech-blue/10 px-2 py-1 rounded-lg hover:shadow-glow-sm"
           >
             {company}
           </a>
         </h3>
-        <div className="text-xl text-slate-600 font-semibold bg-slate-100/80 rounded-lg px-4 py-2 inline-block">
+        <div className="text-xl text-slate-300 font-semibold bg-tech-slate/80 rounded-lg px-4 py-2 inline-block border border-white/10">
           <DateFormatter dateString={fromDate} /> – {" "}
-          <DateFormatter dateString={toDate} />, <span className="text-slate-500 font-medium">{location}</span>
+          <DateFormatter dateString={toDate} />, <span className="text-tech-teal font-medium">{location}</span>
         </div>
       </header>
       
-      <div className="prose prose-xl max-w-none prose-slate">
+      <div className="prose prose-xl max-w-none prose-invert">
         <div
           className={markdownStyles["markdown"]}
           dangerouslySetInnerHTML={{ __html: content }}

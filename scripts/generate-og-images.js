@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
-const { getAllBlogPosts } = require('../lib/api');
 
 // Helper function to wrap text intelligently for OpenGraph images
 function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
@@ -154,6 +153,9 @@ async function generateAllOGImages() {
   }
   
   try {
+    // Dynamically import the ES6 module
+    const { getAllBlogPosts } = await import('../lib/api.js');
+    
     // Get all blog posts
     const blogPosts = getAllBlogPosts();
     console.log(`Found ${blogPosts.length} blog posts`);

@@ -3,16 +3,16 @@ import Link from "next/link";
 
 export default function BlogPostPreview({ title, date, slug, excerpt }) {
   return (
-    <article className="bg-white border border-gray-100 rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <article className="bg-white/90 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:border-blue-300/60 group">
       <div>
         <Link href={`/blog/${slug}`}>
-          <a className="group">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-blue-600 transition-colors duration-200">
+          <a className="group/link">
+            <h2 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-4 group-hover/link:text-blue-700 transition-all duration-300 hover:bg-blue-50/80 px-2 py-1 rounded-lg inline-block tracking-tight">
               {title}
             </h2>
           </a>
         </Link>
-        <time className="text-lg text-gray-600 font-medium block mb-4">
+        <time className="text-xl text-slate-600 font-semibold bg-slate-100/80 rounded-lg px-4 py-2 inline-block">
           <DateFormatter dateString={date} />
         </time>
       </div>

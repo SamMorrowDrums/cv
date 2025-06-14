@@ -11,27 +11,29 @@ export default function Experience({
   content,
 }) {
   return (
-    <section className="mb-8 lg:px-16 xl:px-64">
-      <div>
-        <h3 className="text-2xl lg:text-4xl leading-tight">
+    <article className="bg-white border border-gray-100 rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <header className="mb-6">
+        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3 leading-tight">
           {position} |{" "}
-          <a className="hover:underline" href={link}>
+          <a 
+            href={link}
+            className="text-blue-600 hover:text-blue-800 transition-colors duration-200 border-b-2 border-transparent hover:border-blue-600"
+          >
             {company}
-          </a>{" "}
+          </a>
         </h3>
-        <h4 className="text-xl lg:text-2xl mb-4 text-gray-400">
-          <DateFormatter dateString={fromDate} /> -{" "}
-          <DateFormatter dateString={toDate} />, <small>{location}</small>
-        </h4>
-
-        <div className="mb-4 md:mb-0 text-lg"></div>
-      </div>
-      <div>
+        <div className="text-lg text-gray-600 font-medium">
+          <DateFormatter dateString={fromDate} /> – {" "}
+          <DateFormatter dateString={toDate} />, <span className="text-gray-500">{location}</span>
+        </div>
+      </header>
+      
+      <div className="prose prose-lg max-w-none">
         <div
           className={markdownStyles["markdown"]}
           dangerouslySetInnerHTML={{ __html: content }}
         ></div>
       </div>
-    </section>
+    </article>
   );
 }

@@ -42,11 +42,9 @@ export default function Home({ experiences, projects }) {
             </p>
 
             <nav className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
-              <Link href="/blog" className="w-full sm:w-auto">
-                <a className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-md w-full text-center block">
-                  <span className="relative z-10">Blog</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
-                </a>
+              <Link href="/blog" className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-md w-full sm:w-auto text-center block">
+                <span className="relative z-10">Blog</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
               </Link>
               <a
                 href="https://github.com/sammorrowdrums"

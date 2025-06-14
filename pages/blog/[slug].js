@@ -31,11 +31,9 @@ export default function BlogPostPage({ post }) {
 
         <main className="grid">
           <div className="place-self-center mt-16 mb-12">
-            <Link href="/blog">
-              <a className="group relative px-6 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-sm">
-                <span className="relative z-10">← Back to Blog</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
-              </a>
+            <Link href="/blog" className="group relative px-6 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-neon-blue hover:to-neon-purple transform hover:scale-105 hover:shadow-glow-sm">
+              <span className="relative z-10">← Back to Blog</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
             </Link>
           </div>
           

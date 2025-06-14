@@ -3,7 +3,7 @@ import Head from 'next/head';
 export default function SEO({
   title = 'Sam Morrow',
   description = 'Drummer, software engineer and online-learning fanatic.',
-  image = '/homepage-preview.jpg',
+  image = '/homepage-preview.png',
   url = '',
   type = 'website',
   twitterCard = 'summary_large_image'

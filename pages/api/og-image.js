@@ -1,4 +1,5 @@
-// Simple SVG-based Open Graph image generation
+// PNG-based Open Graph image generation
+import sharp from 'sharp';
 
 // Helper function to wrap text intelligently for OpenGraph images
 function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
@@ -50,7 +51,7 @@ function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
   return lines.filter(line => line.length > 0);
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { title = 'Sam Morrow', subtitle = 'Blog Post' } = req.query;
   
   // Wrap the title intelligently
@@ -112,7 +113,17 @@ export default function handler(req, res) {
     </svg>
   `;
 
-  res.setHeader('Content-Type', 'image/svg+xml');
-  res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-  res.status(200).send(svg);
+  try {
+    // Convert SVG to PNG using Sharp
+    const pngBuffer = await sharp(Buffer.from(svg))
+      .png()
+      .toBuffer();
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    res.status(200).send(pngBuffer);
+  } catch (error) {
+    console.error('Error generating OG image:', error);
+    res.status(500).json({ error: 'Failed to generate image' });
+  }
 }

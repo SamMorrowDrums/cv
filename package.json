@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-og-images.mjs && next build",
+    "build": "npm run generate-og-images && next build",
+    "build:fallback": "next build",
+    "build:with-images": "node scripts/generate-og-images.mjs && next build",
+    "generate-og-images": "node scripts/generate-og-images.mjs",
     "start": "next start"
   },
   "dependencies": {

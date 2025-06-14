@@ -165,18 +165,32 @@ async function generateAllOGImages() {
       const filename = `${post.slug}.png`;
       const outputPath = path.join(ogImagesDir, filename);
       
-      await generateOGImage(post.title, outputPath, 'Blog Post');
+      try {
+        await generateOGImage(post.title, outputPath, 'Blog Post');
+      } catch (error) {
+        console.warn(`Failed to generate OG image for ${post.slug}:`, error.message);
+      }
     }
     
     // Generate default images for static pages
-    await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow');
-    await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic');
+    try {
+      await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow');
+    } catch (error) {
+      console.warn('Failed to generate blog OG image:', error.message);
+    }
+    
+    try {
+      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic');
+    } catch (error) {
+      console.warn('Failed to generate home OG image:', error.message);
+    }
     
     console.log('OG image generation complete!');
     
   } catch (error) {
     console.error('Error generating OG images:', error);
-    process.exit(1);
+    // Don't exit with error code - let the build continue
+    console.log('OG image generation failed, but continuing with build...');
   }
 }
 

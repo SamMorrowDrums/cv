@@ -103,15 +103,11 @@ export default function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={rectangularImageUrl} />
+      <meta name="twitter:image:width" content="1200" />
+      <meta name="twitter:image:height" content="630" />
       <meta name="twitter:image:alt" content={fullTitle} />
       
-      {/* LinkedIn specific meta tags */}
-      {type === 'article' && author && (
-        <>
-          <meta property="article:author" content={author} />
-          <meta name="article:author" content={author} />
-        </>
-      )}
+
       
       {/* JSON-LD structured data for better recognition */}
       {structuredData && (

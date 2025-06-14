@@ -10,8 +10,8 @@ export default function SEO({
 }) {
   const siteName = 'Sam Morrow';
   const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
-  const fullUrl = url ? `https://sammorrow.dev${url}` : 'https://sammorrow.dev';
-  const fullImageUrl = image.startsWith('http') ? image : `https://sammorrow.dev${image}`;
+  const fullUrl = url ? `https://sam-morrow.com${url}` : 'https://sam-morrow.com';
+  const fullImageUrl = image.startsWith('http') ? image : `https://sam-morrow.com${image}`;
 
   return (
     <Head>

@@ -6,7 +6,7 @@ import {
   projectsDirectory,
 } from "../lib/api";
 import markdownToHtml from "../lib/markDownToHtml";
-import Head from "next/head";
+import SEO from "../components/SEO";
 import Link from "next/link";
 
 export default function Home({ experiences, projects }) {
@@ -20,10 +20,12 @@ export default function Home({ experiences, projects }) {
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        <Head>
-          <title>Sam Morrow</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <SEO 
+          title="Sam Morrow"
+          description="Drummer, software engineer and online-learning fanatic."
+          image="/homepage-preview.svg"
+          url=""
+        />
 
         <main>
           {/* Header Section */}

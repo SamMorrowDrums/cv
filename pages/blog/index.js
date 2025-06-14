@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import BlogPostPreview from "../../components/BlogPostPreview";
 import { getAllBlogPosts } from "../../lib/api";
+import SEO from "../../components/SEO";
 
 export default function Blog({ posts }) {
   return (
@@ -14,10 +15,12 @@ export default function Blog({ posts }) {
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        <Head>
-          <title>Blog | Sam Morrow</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <SEO 
+          title="Blog"
+          description="Thoughts and insights on software engineering, technology, and continuous learning."
+          image="/api/og-image?title=Blog&subtitle=Sam Morrow"
+          url="/blog"
+        />
 
         <main>
           <div className="mb-10">

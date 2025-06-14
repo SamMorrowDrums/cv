@@ -3,8 +3,12 @@ import Link from "next/link";
 import BlogPost from "../../components/BlogPost";
 import { getDocumentBySlug, getSlugs, blogDirectory } from "../../lib/api";
 import markdownToHtml from "../../lib/markDownToHtml";
+import SEO from "../../components/SEO";
+import { getBlogPostMeta } from "../../lib/seo";
 
 export default function BlogPostPage({ post }) {
+  const seoMeta = getBlogPostMeta(post);
+  
   return (
     <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen pb-32 px-4 sm:px-16 relative overflow-hidden tech-grid">
       {/* Subtle animated background pattern */}
@@ -15,10 +19,13 @@ export default function BlogPostPage({ post }) {
       </div>
       
       <div className="container mx-auto font-sans relative z-10">
-        <Head>
-          <title>{post.title} | Sam Morrow</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <SEO 
+          title={seoMeta.title}
+          description={seoMeta.description}
+          image={seoMeta.image}
+          url={seoMeta.url}
+          type={seoMeta.type}
+        />
 
         <main className="grid">
           <div className="place-self-center mt-16 mb-12">

@@ -1,0 +1,43 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#334155"/>
+    </linearGradient>
+    <linearGradient id="nameGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0ea5e9"/>
+      <stop offset="35%" style="stop-color:#8b5cf6"/>
+      <stop offset="70%" style="stop-color:#a855f7"/>
+      <stop offset="100%" style="stop-color:#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0ea5e9"/>
+      <stop offset="100%" style="stop-color:#14b8a6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Decorative floating elements -->
+  <circle cx="200" cy="120" r="50" fill="#0ea5e9" opacity="0.1"/>
+  <circle cx="1000" cy="150" r="70" fill="#8b5cf6" opacity="0.1"/>
+  <circle cx="800" cy="500" r="45" fill="#14b8a6" opacity="0.1"/>
+  
+  <!-- Sam Morrow title -->
+  <text x="150" y="260" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="120" font-weight="900" fill="url(#nameGrad)" letter-spacing="-0.05em">
+    Sam Morrow
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="150" y="340" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="48" font-weight="300" fill="#94a3b8">
+    Drummer, <tspan font-weight="600" fill="url(#textGrad)">software engineer</tspan> and
+  </text>
+  <text x="150" y="400" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="48" font-weight="600" fill="url(#textGrad)">
+    online-learning fanatic.
+  </text>
+</svg>

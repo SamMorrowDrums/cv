@@ -16,11 +16,11 @@ export default function Blog({ posts }) {
           <div className="mb-10">
             <Link href="/">
               <a className="text-xl font-semibold text-blue-700 hover:text-blue-900 transition-all duration-300 border-b-3 border-transparent hover:border-blue-700 pb-2 px-4 py-2 rounded-lg hover:bg-blue-50/80 transform hover:scale-105">
-                ← Back to Home
+                ← Home
               </a>
             </Link>
           </div>
-          
+
           <header className="text-center mb-20 py-12 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 mb-8 tracking-tight">
               Blog

@@ -6,7 +6,9 @@ export default function SEO({
   image = '/homepage-preview.png',
   url = '',
   type = 'website',
-  twitterCard = 'summary_large_image'
+  twitterCard = 'summary_large_image',
+  author = null,
+  publishedTime = null
 }) {
   const siteName = 'Sam Morrow';
   const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
@@ -55,6 +57,14 @@ export default function SEO({
       <meta property="og:image:alt" content={fullTitle} />
       
       <meta property="og:site_name" content={siteName} />
+      
+      {/* Article-specific metadata for blog posts */}
+      {type === 'article' && author && (
+        <meta property="article:author" content={author} />
+      )}
+      {type === 'article' && publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+      )}
       
       {/* Twitter */}
       <meta name="twitter:card" content={twitterCard} />

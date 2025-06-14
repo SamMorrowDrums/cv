@@ -58,6 +58,9 @@ export default function SEO({
 
   return (
     <Head>
+      {/* Static site indicator for debugging */}
+      <meta name="static-site" content="true" />
+      
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="icon" href="/favicon.ico" />

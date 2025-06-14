@@ -25,6 +25,8 @@ export default function BlogPostPage({ post }) {
           image={seoMeta.image}
           url={seoMeta.url}
           type={seoMeta.type}
+          author={seoMeta.author}
+          publishedTime={seoMeta.publishedTime}
         />
 
         <main className="grid">

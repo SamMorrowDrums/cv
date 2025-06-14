@@ -18,7 +18,7 @@ export default function Blog({ posts }) {
         <SEO 
           title="Blog"
           description="Thoughts and insights on software engineering, technology, and continuous learning."
-          image="/api/og-image?title=Blog&subtitle=Sam Morrow"
+          image="/og-images/blog.png"
           url="/blog"
         />
 

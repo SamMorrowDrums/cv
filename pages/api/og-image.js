@@ -2,7 +2,10 @@
 import sharp from 'sharp';
 
 // Helper function to wrap text intelligently for OpenGraph images
-function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
+function wrapTitle(title, format = 'rectangular', maxLines = 2) {
+  // Adjust character limits based on format - more characters for rectangular format
+  const maxCharsPerLine = format === 'square' ? 12 : 18;
+  
   if (!title || title.length <= maxCharsPerLine) {
     return [title || ''];
   }
@@ -52,24 +55,54 @@ function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
 }
 
 export default async function handler(req, res) {
-  const { title = 'Sam Morrow', subtitle = 'Blog Post' } = req.query;
+  const { title = 'Sam Morrow', subtitle = 'Blog Post', format = 'rectangular' } = req.query;
   
-  // Wrap the title intelligently
-  const titleLines = wrapTitle(title);
+  // Determine dimensions based on format
+  const isSquare = format === 'square';
+  const width = 1200;
+  const height = isSquare ? 1200 : 630;
+  
+  // Wrap the title intelligently based on format
+  const titleLines = wrapTitle(title, format);
   const isMultiLine = titleLines.length > 1;
   
-  // Adjust positioning based on number of lines
-  const titleStartY = isMultiLine ? 240 : 280;
-  const subtitleY = isMultiLine ? 380 : 350;
+  // Adjust positioning and sizing based on format and number of lines
+  let titleStartY, subtitleY, titleFontSize, authorY, descY;
+  
+  if (isSquare) {
+    // Square format positioning - more vertical space
+    titleStartY = isMultiLine ? 320 : 400;
+    subtitleY = isMultiLine ? 520 : 480;
+    titleFontSize = isMultiLine ? 64 : 72;
+    authorY = 720;
+    descY = 760;
+  } else {
+    // Rectangular format positioning - same as before
+    titleStartY = isMultiLine ? 240 : 280;
+    subtitleY = isMultiLine ? 380 : 350;
+    titleFontSize = 72;
+    authorY = 520;
+    descY = 560;
+  }
   
   // Generate title text elements
   const titleElements = titleLines.map((line, index) => 
-    `<text x="100" y="${titleStartY + (index * 80)}" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="900" fill="url(#text)">${line}</text>`
+    `<text x="100" y="${titleStartY + (index * (titleFontSize + 8))}" font-family="system-ui, -apple-system, sans-serif" font-size="${titleFontSize}" font-weight="900" fill="url(#text)">${line}</text>`
   ).join('\n      ');
   
-  // Create a simple SVG image with the title
+  // Adjust decorative elements for square format - minimal elements for smaller file size
+  const decorativeElements = isSquare ? `
+    <circle cx="200" cy="200" r="40" fill="#0ea5e9" opacity="0.06"/>
+    <circle cx="1000" cy="300" r="60" fill="#8b5cf6" opacity="0.06"/>
+  ` : `
+    <circle cx="200" cy="150" r="80" fill="#0ea5e9" opacity="0.1"/>
+    <circle cx="1000" cy="200" r="120" fill="#8b5cf6" opacity="0.1"/>
+    <circle cx="800" cy="500" r="60" fill="#14b8a6" opacity="0.1"/>
+  `;
+  
+  // Create SVG with appropriate dimensions
   const svg = `
-    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#0f172a"/>
@@ -86,12 +119,10 @@ export default async function handler(req, res) {
       </defs>
       
       <!-- Background -->
-      <rect width="1200" height="630" fill="url(#bg)"/>
+      <rect width="${width}" height="${height}" fill="url(#bg)"/>
       
       <!-- Decorative elements -->
-      <circle cx="200" cy="150" r="80" fill="#0ea5e9" opacity="0.1"/>
-      <circle cx="1000" cy="200" r="120" fill="#8b5cf6" opacity="0.1"/>
-      <circle cx="800" cy="500" r="60" fill="#14b8a6" opacity="0.1"/>
+      ${decorativeElements}
       
       <!-- Main title -->
       ${titleElements}
@@ -102,26 +133,55 @@ export default async function handler(req, res) {
       </text>
       
       <!-- Author -->
-      <text x="100" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#e2e8f0">
+      <text x="100" y="${authorY}" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#e2e8f0">
         Sam Morrow
       </text>
       
       <!-- Description -->
-      <text x="100" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8">
+      <text x="100" y="${descY}" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8">
         Drummer, software engineer and online-learning fanatic
       </text>
     </svg>
   `;
 
   try {
-    // Convert SVG to PNG using Sharp
-    const pngBuffer = await sharp(Buffer.from(svg))
-      .png()
+    // Convert SVG to PNG using Sharp with optimization
+    // Use much more aggressive compression for square images to meet size limits
+    const initialQuality = isSquare ? 30 : 80;
+    let pngBuffer = await sharp(Buffer.from(svg))
+      .png({ 
+        compressionLevel: 9,
+        quality: initialQuality,
+        effort: 10
+      })
       .toBuffer();
+
+    // Check file size and optimize if needed
+    let finalBuffer = pngBuffer;
+    if (pngBuffer.length > 100 * 1024) { // 100KB limit
+      finalBuffer = await sharp(Buffer.from(svg))
+        .png({ 
+          compressionLevel: 9,
+          quality: isSquare ? 20 : 50,
+          effort: 10
+        })
+        .toBuffer();
+        
+      // If still too large, try even more aggressive compression
+      if (finalBuffer.length > 100 * 1024) {
+        finalBuffer = await sharp(Buffer.from(svg))
+          .png({ 
+            compressionLevel: 9,
+            quality: isSquare ? 15 : 40,
+            effort: 10
+          })
+          .toBuffer();
+      }
+    }
 
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    res.status(200).send(pngBuffer);
+    res.status(200).send(finalBuffer);
   } catch (error) {
     console.error('Error generating OG image:', error);
     res.status(500).json({ error: 'Failed to generate image' });

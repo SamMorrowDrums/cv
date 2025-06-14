@@ -11,27 +11,29 @@ export default function Experience({
   content,
 }) {
   return (
-    <section className="mb-8 lg:px-16 xl:px-64">
-      <div>
-        <h3 className="text-2xl lg:text-4xl leading-tight">
-          {position} |{" "}
-          <a className="hover:underline" href={link}>
+    <article className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <header className="mb-4">
+        <h3 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2 leading-tight">
+          {position} at{" "}
+          <a 
+            className="text-blue-600 hover:text-blue-800 transition-colors duration-200 border-b border-transparent hover:border-blue-600" 
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {company}
-          </a>{" "}
+          </a>
         </h3>
-        <h4 className="text-xl lg:text-2xl mb-4 text-gray-400">
-          <DateFormatter dateString={fromDate} /> -{" "}
-          <DateFormatter dateString={toDate} />, <small>{location}</small>
-        </h4>
-
-        <div className="mb-4 md:mb-0 text-lg"></div>
-      </div>
-      <div>
-        <div
-          className={markdownStyles["markdown"]}
-          dangerouslySetInnerHTML={{ __html: content }}
-        ></div>
-      </div>
-    </section>
+        <div className="text-gray-600 text-base sm:text-lg">
+          <DateFormatter dateString={fromDate} /> – <DateFormatter dateString={toDate} />
+          {location && <span className="ml-2 text-gray-500">• {location}</span>}
+        </div>
+      </header>
+      
+      <div
+        className={`${markdownStyles["markdown"]} text-gray-700`}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    </article>
   );
 }

@@ -12,9 +12,14 @@ export default function BlogPostPreview({ title, date, slug, excerpt }) {
             </h2>
           </a>
         </Link>
-        <time className="text-xl text-slate-600 font-semibold bg-slate-100/80 rounded-lg px-4 py-2 inline-block">
+        <time className="text-xl text-slate-600 font-semibold bg-slate-100/80 rounded-lg px-4 py-2 inline-block mb-4">
           <DateFormatter dateString={date} />
         </time>
+        {excerpt && (
+          <p className="text-lg text-slate-700 leading-relaxed mt-4">
+            {excerpt}
+          </p>
+        )}
       </div>
     </article>
   );

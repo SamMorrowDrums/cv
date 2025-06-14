@@ -3,7 +3,10 @@ import path from 'path';
 import sharp from 'sharp';
 
 // Helper function to wrap text intelligently for OpenGraph images
-function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
+function wrapTitle(title, format = 'rectangular', maxLines = 2) {
+  // Adjust character limits based on format - more characters for rectangular format
+  const maxCharsPerLine = format === 'square' ? 12 : 18;
+  
   if (!title || title.length <= maxCharsPerLine) {
     return [title || ''];
   }
@@ -53,23 +56,53 @@ function wrapTitle(title, maxCharsPerLine = 15, maxLines = 2) {
 }
 
 // Generate SVG for OG image
-function generateSVG(title, subtitle = 'Blog Post') {
-  // Wrap the title intelligently
-  const titleLines = wrapTitle(title);
+function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular') {
+  // Determine dimensions based on format
+  const isSquare = format === 'square';
+  const width = 1200;
+  const height = isSquare ? 1200 : 630;
+  
+  // Wrap the title intelligently based on format
+  const titleLines = wrapTitle(title, format);
   const isMultiLine = titleLines.length > 1;
   
-  // Adjust positioning based on number of lines
-  const titleStartY = isMultiLine ? 240 : 280;
-  const subtitleY = isMultiLine ? 380 : 350;
+  // Adjust positioning and sizing based on format and number of lines
+  let titleStartY, subtitleY, titleFontSize, authorY, descY;
+  
+  if (isSquare) {
+    // Square format positioning - more vertical space
+    titleStartY = isMultiLine ? 320 : 400;
+    subtitleY = isMultiLine ? 520 : 480;
+    titleFontSize = isMultiLine ? 64 : 72;
+    authorY = 720;
+    descY = 760;
+  } else {
+    // Rectangular format positioning - same as before
+    titleStartY = isMultiLine ? 240 : 280;
+    subtitleY = isMultiLine ? 380 : 350;
+    titleFontSize = 72;
+    authorY = 520;
+    descY = 560;
+  }
   
   // Generate title text elements
   const titleElements = titleLines.map((line, index) => 
-    `<text x="100" y="${titleStartY + (index * 80)}" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="900" fill="url(#text)">${line}</text>`
+    `<text x="100" y="${titleStartY + (index * (titleFontSize + 8))}" font-family="system-ui, -apple-system, sans-serif" font-size="${titleFontSize}" font-weight="900" fill="url(#text)">${line}</text>`
   ).join('\n      ');
   
-  // Create a simple SVG image with the title
+  // Adjust decorative elements for square format - minimal elements for smaller file size
+  const decorativeElements = isSquare ? `
+    <circle cx="200" cy="200" r="40" fill="#0ea5e9" opacity="0.06"/>
+    <circle cx="1000" cy="300" r="60" fill="#8b5cf6" opacity="0.06"/>
+  ` : `
+    <circle cx="200" cy="150" r="80" fill="#0ea5e9" opacity="0.1"/>
+    <circle cx="1000" cy="200" r="120" fill="#8b5cf6" opacity="0.1"/>
+    <circle cx="800" cy="500" r="60" fill="#14b8a6" opacity="0.1"/>
+  `;
+  
+  // Create SVG with appropriate dimensions
   return `
-    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#0f172a"/>
@@ -86,12 +119,10 @@ function generateSVG(title, subtitle = 'Blog Post') {
       </defs>
       
       <!-- Background -->
-      <rect width="1200" height="630" fill="url(#bg)"/>
+      <rect width="${width}" height="${height}" fill="url(#bg)"/>
       
       <!-- Decorative elements -->
-      <circle cx="200" cy="150" r="80" fill="#0ea5e9" opacity="0.1"/>
-      <circle cx="1000" cy="200" r="120" fill="#8b5cf6" opacity="0.1"/>
-      <circle cx="800" cy="500" r="60" fill="#14b8a6" opacity="0.1"/>
+      ${decorativeElements}
       
       <!-- Main title -->
       ${titleElements}
@@ -102,12 +133,12 @@ function generateSVG(title, subtitle = 'Blog Post') {
       </text>
       
       <!-- Author -->
-      <text x="100" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#e2e8f0">
+      <text x="100" y="${authorY}" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#e2e8f0">
         Sam Morrow
       </text>
       
       <!-- Description -->
-      <text x="100" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8">
+      <text x="100" y="${descY}" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8">
         Drummer, software engineer and online-learning fanatic
       </text>
     </svg>
@@ -115,14 +146,43 @@ function generateSVG(title, subtitle = 'Blog Post') {
 }
 
 // Generate OG image and save to file
-async function generateOGImage(title, outputPath, subtitle = 'Blog Post') {
+async function generateOGImage(title, outputPath, subtitle = 'Blog Post', format = 'rectangular') {
   try {
-    const svg = generateSVG(title, subtitle);
+    const svg = generateSVG(title, subtitle, format);
+    const isSquare = format === 'square';
     
-    // Convert SVG to PNG using Sharp
-    const pngBuffer = await sharp(Buffer.from(svg))
-      .png()
+    // Convert SVG to PNG using Sharp with optimization
+    // Use more aggressive compression for square images to meet size limits
+    const initialQuality = isSquare ? 60 : 80;
+    let pngBuffer = await sharp(Buffer.from(svg))
+      .png({ 
+        compressionLevel: 9,
+        quality: initialQuality,
+        effort: 10
+      })
       .toBuffer();
+
+    // Check file size and optimize if needed to stay under 100KB
+    if (pngBuffer.length > 100 * 1024) { // 100KB limit
+      pngBuffer = await sharp(Buffer.from(svg))
+        .png({ 
+          compressionLevel: 9,
+          quality: isSquare ? 40 : 50,
+          effort: 10
+        })
+        .toBuffer();
+        
+      // If still too large, try even more aggressive compression
+      if (pngBuffer.length > 100 * 1024) {
+        pngBuffer = await sharp(Buffer.from(svg))
+          .png({ 
+            compressionLevel: 9,
+            quality: isSquare ? 30 : 40,
+            effort: 10
+          })
+          .toBuffer();
+      }
+    }
     
     // Create directory if it doesn't exist
     const dir = path.dirname(outputPath);
@@ -132,7 +192,7 @@ async function generateOGImage(title, outputPath, subtitle = 'Blog Post') {
     
     // Write the file
     fs.writeFileSync(outputPath, pngBuffer);
-    console.log(`Generated OG image: ${outputPath}`);
+    console.log(`Generated OG image: ${outputPath} (${Math.round(pngBuffer.length / 1024)}KB)`);
     
   } catch (error) {
     console.error(`Error generating OG image for "${title}":`, error);
@@ -162,27 +222,34 @@ async function generateAllOGImages() {
     
     // Generate images for each blog post
     for (const post of blogPosts) {
-      const filename = `${post.slug}.png`;
-      const outputPath = path.join(ogImagesDir, filename);
+      const filenameRect = `${post.slug}.png`;
+      const filenameSquare = `${post.slug}-square.png`;
+      const outputPathRect = path.join(ogImagesDir, filenameRect);
+      const outputPathSquare = path.join(ogImagesDir, filenameSquare);
       
       try {
-        await generateOGImage(post.title, outputPath, 'Blog Post');
+        // Generate rectangular version
+        await generateOGImage(post.title, outputPathRect, 'Blog Post', 'rectangular');
+        // Generate square version
+        await generateOGImage(post.title, outputPathSquare, 'Blog Post', 'square');
       } catch (error) {
-        console.warn(`Failed to generate OG image for ${post.slug}:`, error.message);
+        console.warn(`Failed to generate OG images for ${post.slug}:`, error.message);
       }
     }
     
     // Generate default images for static pages
     try {
-      await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow');
+      await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow', 'rectangular');
+      await generateOGImage('Blog', path.join(ogImagesDir, 'blog-square.png'), 'Sam Morrow', 'square');
     } catch (error) {
-      console.warn('Failed to generate blog OG image:', error.message);
+      console.warn('Failed to generate blog OG images:', error.message);
     }
     
     try {
-      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic');
+      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic', 'rectangular');
+      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home-square.png'), 'Drummer, software engineer and online-learning fanatic', 'square');
     } catch (error) {
-      console.warn('Failed to generate home OG image:', error.message);
+      console.warn('Failed to generate home OG images:', error.message);
     }
     
     console.log('OG image generation complete!');

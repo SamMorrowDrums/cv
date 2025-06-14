@@ -23,7 +23,7 @@ export default function Home({ experiences, projects }) {
         <SEO 
           title="Sam Morrow"
           description="Drummer, software engineer and online-learning fanatic."
-          image="/homepage-preview.svg"
+          image="/homepage-preview.png"
           url=""
         />
 

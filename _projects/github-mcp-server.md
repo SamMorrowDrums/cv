@@ -4,7 +4,7 @@ link: 'https://github.com/github/github-mcp-server'
 fromDate: '2024-01-01T00:00:00.000Z'
 ---
 
-The GitHub MCP Server is an open source Model Context Protocol (MCP) server that provides seamless integration with the GitHub Platform, enabling AI agents to talk to leverage GitHub and end users to convey their goals and intentions through natural language.
+The GitHub MCP Server is an open source Model Context Protocol (MCP) server that provides seamless integration with the GitHub Platform, enabling AI agents to leverage GitHub and end users to convey their goals and intentions through natural language.
 
 When I started working on this with a couple of colleagues it was a fun side project and it just took off, getting over 10k stars on GitHub in a week and gave it this incredible momentum that lead to thousands of forks of the code and it became my primary focus at work, and a huge part of my team's work.
 

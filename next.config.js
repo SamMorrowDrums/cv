@@ -4,7 +4,7 @@ const nextConfig = {
   trailingSlash: false,
   output: 'export',
   // Ensure proper static generation
-  generateEtags: false,
+  generateEtags: true,
   poweredByHeader: false,
   // Configure webpack for better static assets
   webpack: (config, { isServer }) => {

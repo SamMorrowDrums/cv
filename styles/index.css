@@ -10,12 +10,37 @@
     @apply font-sans antialiased;
   }
 
-  /* Subtle tech grid pattern */
+  /* Enhanced tech grid pattern with animation */
   .tech-grid {
     background-image: 
-      linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
+      linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(255, 20, 147, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 20, 147, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px, 100px 100px, 100px 100px;
+    animation: grid-move 20s linear infinite;
+  }
+
+  @keyframes grid-move {
+    0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+    100% { background-position: 50px 50px, 50px 50px, 100px 100px, 100px 100px; }
+  }
+
+  /* Animated gradient background */
+  .dynamic-bg {
+    background: linear-gradient(
+      45deg,
+      rgba(15, 23, 42, 0.9),
+      rgba(30, 41, 59, 0.8),
+      rgba(15, 23, 42, 0.9)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease-in-out infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 }
 
@@ -130,5 +155,151 @@
     mask-composite: xor;
     -webkit-mask-composite: xor;
     pointer-events: none;
+  }
+
+  /* Enhanced jazzy utilities */
+  .neon-text {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor,
+      0 0 20px currentColor;
+  }
+
+  .electric-text {
+    text-shadow: 
+      0 0 10px #ffff00,
+      0 0 20px #ff1493,
+      0 0 30px #00ffff,
+      0 0 40px #ff4500;
+  }
+
+  .rainbow-text {
+    background: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff7700,
+      #ffff00,
+      #00ff00,
+      #0077ff,
+      #8b00ff
+    );
+    background-size: 200% 200%;
+    animation: rainbow 3s ease-in-out infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glitch-text {
+    position: relative;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-text::before {
+    animation: glitch 0.3s infinite;
+    color: #ff073a;
+    z-index: -1;
+  }
+
+  .glitch-text::after {
+    animation: glitch 0.3s infinite reverse;
+    color: #39ff14;
+    z-index: -2;
+  }
+
+  .cyber-glow {
+    box-shadow: 
+      0 0 20px rgba(204, 255, 0, 0.6),
+      0 0 40px rgba(255, 20, 147, 0.4),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+
+  .plasma-border {
+    position: relative;
+    background: linear-gradient(45deg, #0080ff, #bf00ff, #ff4500, #ccff00);
+    background-size: 400% 400%;
+    animation: rainbow 3s ease-in-out infinite;
+    padding: 2px;
+    border-radius: inherit;
+  }
+
+  .plasma-border::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: inherit;
+    border-radius: inherit;
+    background: rgba(15, 23, 42, 0.95);
+  }
+
+  .hover-electric:hover {
+    animation: electric 2s ease-in-out infinite alternate;
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+
+  .scan-lines {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-lines::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 255, 0.03) 2px,
+        rgba(0, 255, 255, 0.03) 4px
+      );
+    pointer-events: none;
+    animation: scan-line 2s linear infinite;
+  }
+
+  @keyframes scan-line {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  .holographic {
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: holographic 3s ease-in-out infinite;
+  }
+
+  @keyframes holographic {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+  }
+
+  .retro-grid {
+    background-image: 
+      linear-gradient(rgba(255, 20, 147, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 20, 147, 0.1) 1px, transparent 1px),
+      linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
   }
 }

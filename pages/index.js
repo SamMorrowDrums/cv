@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Home({ experiences, projects }) {
   return (
-    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen relative overflow-hidden tech-grid dynamic-bg scan-lines">
+    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen relative overflow-hidden tech-grid dynamic-bg scan-lines matrix-rain">
       {/* Enhanced animated background pattern with more elements */}
       <div className="absolute inset-0 opacity-10 md:opacity-15">
         {/* Original floating orbs with enhanced effects */}
@@ -20,13 +20,17 @@ export default function Home({ experiences, projects }) {
         <div className="absolute bottom-20 left-40 w-28 h-28 md:w-56 md:h-56 bg-tech-teal rounded-full mix-blend-multiply filter blur-xl animate-float shadow-cyber-glow" style={{animationDelay: '4s'}}></div>
         
         {/* New jazzy floating elements */}
-        <div className="absolute top-60 left-60 w-20 h-20 md:w-40 md:h-40 bg-hot-pink rounded-full mix-blend-multiply filter blur-lg animate-bounce-slow shadow-laser" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-60 left-60 w-20 h-20 md:w-40 md:h-40 bg-hot-pink rounded-full mix-blend-multiply filter blur-lg animate-float-bounce shadow-laser" style={{animationDelay: '1s'}}></div>
         <div className="absolute bottom-40 right-60 w-24 h-24 md:w-48 md:h-48 bg-electric-lime rounded-full mix-blend-multiply filter blur-lg animate-pulse-slow shadow-voltage" style={{animationDelay: '3s'}}></div>
         <div className="absolute top-80 right-40 w-16 h-16 md:w-32 md:h-32 bg-neon-orange rounded-full mix-blend-multiply filter blur-lg animate-spin-slow shadow-neon-rainbow" style={{animationDelay: '5s'}}></div>
         
         {/* Geometric shapes for added excitement */}
-        <div className="absolute top-32 right-80 w-12 h-12 md:w-24 md:h-24 bg-gradient-to-r from-cyber-yellow to-voltage-blue transform rotate-45 mix-blend-multiply filter blur-md animate-wave" style={{animationDelay: '2.5s'}}></div>
-        <div className="absolute bottom-60 left-80 w-8 h-8 md:w-16 md:h-16 bg-gradient-to-r from-laser-red to-electric-purple transform rotate-12 mix-blend-multiply filter blur-sm animate-wiggle" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-32 right-80 w-12 h-12 md:w-24 md:h-24 bg-gradient-to-r from-cyber-yellow to-voltage-blue transform rotate-45 mix-blend-multiply filter blur-md animate-wave disco-ball" style={{animationDelay: '2.5s'}}></div>
+        <div className="absolute bottom-60 left-80 w-8 h-8 md:w-16 md:h-16 bg-gradient-to-r from-laser-red to-electric-purple transform rotate-12 mix-blend-multiply filter blur-sm animate-wiggle strobe" style={{animationDelay: '1.5s'}}></div>
+        
+        {/* Extra disco elements */}
+        <div className="absolute top-96 left-32 w-6 h-6 md:w-12 md:h-12 bg-gradient-to-r from-hot-pink to-cyber-yellow rounded-full mix-blend-multiply filter blur-sm animate-disco" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute bottom-32 right-96 w-10 h-10 md:w-20 md:h-20 bg-gradient-to-r from-electric-lime to-plasma-blue transform rotate-45 mix-blend-multiply filter blur-md animate-energy-flow" style={{animationDelay: '3.5s'}}></div>
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
@@ -39,20 +43,20 @@ export default function Home({ experiences, projects }) {
 
         <main>
           {/* Header Section */}
-          <header className="text-center mb-20 py-16 glass-morphism-dark rounded-3xl shadow-electric hover:shadow-plasma transition-all duration-500 border border-white/10 animate-slide-up hover-electric plasma-border">
+          <header className="text-center mb-20 py-16 cyber-card rounded-3xl shadow-electric hover:shadow-plasma transition-all duration-500 border border-white/10 animate-slide-up hover-electric plasma-border energy-pulse neon-accent">
             <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tight neon-text text-shadow-lg">
               <span className="bg-gradient-to-r from-neon-blue via-hot-pink via-electric-lime to-neon-teal bg-clip-text text-transparent animate-rainbow">
                 Sam Morrow
               </span>
-              <span className="text-neon-blue animate-blink ml-2 animate-color-shift">|</span>
+              <span className="text-neon-blue animate-blink ml-2 animate-color-shift strobe">|</span>
             </h1>
 
             <p className="text-2xl md:text-3xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light animate-neon-glow">
-              Drummer, <span className="text-tech-blue font-semibold rainbow-text">software engineer</span> and <span className="text-tech-teal font-semibold electric-text">online-learning fanatic</span>.
+              Drummer, <span className="text-tech-blue font-semibold rainbow-text animate-float-bounce">software engineer</span> and <span className="text-tech-teal font-semibold electric-text animate-wiggle">online-learning fanatic</span>.
             </p>
 
             <nav className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
-              <Link href="/blog" className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-hot-pink hover:to-electric-lime transform hover:scale-110 hover:shadow-electric w-full sm:w-auto text-center block animate-scale-pulse">
+              <Link href="/blog" className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-blue to-tech-purple hover:from-hot-pink hover:to-electric-lime transform hover:scale-110 hover:shadow-electric w-full sm:w-auto text-center block animate-scale-pulse cyber-card">
                 <span className="relative z-10 neon-text">Blog</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-tech-blue to-tech-purple rounded-xl blur opacity-40 group-hover:opacity-80 transition-opacity duration-300 animate-rotate-glow"></div>
               </Link>
@@ -60,9 +64,9 @@ export default function Home({ experiences, projects }) {
                 href="https://github.com/sammorrowdrums"
                 rel="noopener noreferrer"
                 target="_blank"
-                className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-teal to-tech-emerald hover:from-neon-orange hover:to-voltage-blue transform hover:scale-110 hover:shadow-cyber-glow w-full sm:w-auto text-center block animate-wave"
+                className="group relative px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-tech-teal to-tech-emerald hover:from-neon-orange hover:to-voltage-blue transform hover:scale-110 hover:shadow-cyber-glow w-full sm:w-auto text-center block animate-wave energy-pulse"
               >
-                <span className="relative z-10 cyber-glow">GitHub</span>
+                <span className="relative z-10 cyber-glow disco-ball">GitHub</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-tech-teal to-tech-emerald rounded-xl blur opacity-40 group-hover:opacity-80 transition-opacity duration-300 animate-rainbow"></div>
               </a>
             </nav>

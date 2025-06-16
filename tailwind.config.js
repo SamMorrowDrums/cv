@@ -82,6 +82,12 @@ module.exports = {
         "color-shift": "colorShift 4s ease-in-out infinite",
         "scale-pulse": "scalePulse 2s ease-in-out infinite",
         "rotate-glow": "rotateGlow 6s linear infinite",
+        // Extra jazzy animations
+        "float-bounce": "floatBounce 3s ease-in-out infinite",
+        "disco": "disco 2s linear infinite",
+        "strobe": "strobe 0.2s infinite alternate",
+        "energy-flow": "energyFlow 3s ease-in-out infinite",
+        "matrix-fall": "matrixFall 10s linear infinite",
       },
       keyframes: {
         float: {
@@ -174,6 +180,29 @@ module.exports = {
             transform: "rotate(360deg)",
             filter: "hue-rotate(360deg) brightness(1.2)"
           },
+        },
+        // Extra jazzy keyframes
+        floatBounce: {
+          "0%, 100%": { transform: "translateY(0px) scale(1)" },
+          "25%": { transform: "translateY(-5px) scale(1.02)" },
+          "50%": { transform: "translateY(-10px) scale(1.05)" },
+          "75%": { transform: "translateY(-5px) scale(1.02)" },
+        },
+        disco: {
+          "0%": { backgroundPosition: "0 0, 5px 5px, 10px 10px, 15px 15px" },
+          "100%": { backgroundPosition: "20px 20px, 25px 25px, 30px 30px, 35px 35px" },
+        },
+        strobe: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0.7" },
+        },
+        energyFlow: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        matrixFall: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(calc(100vh + 100px))" },
         },
       },
     },

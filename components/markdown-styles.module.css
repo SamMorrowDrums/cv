@@ -1,5 +1,8 @@
 .markdown {
     @apply text-xl leading-relaxed text-slate-300 font-medium;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .markdown p,
@@ -36,6 +39,8 @@
 
 .markdown a {
     @apply text-tech-blue hover:text-neon-blue transition-all duration-300 font-semibold border-b-2 border-transparent hover:border-tech-blue hover:bg-tech-blue/10 px-1 py-0.5 rounded;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 .markdown a:hover {
@@ -54,4 +59,22 @@
     @apply w-full max-w-none rounded-lg border border-white/10;
     aspect-ratio: 16 / 9;
     min-height: 360px;
+}
+
+.markdown .youtube-embed {
+    @apply w-full max-w-none my-6;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.markdown .youtube-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    @apply rounded-lg border border-white/10;
 }

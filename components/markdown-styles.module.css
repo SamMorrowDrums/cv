@@ -49,3 +49,9 @@
 .markdown blockquote {
     @apply border-l-4 border-tech-blue pl-6 italic text-slate-400 bg-tech-blue/10 py-4 rounded-r-lg border border-white/10;
 }
+
+.markdown iframe {
+    @apply w-full max-w-none rounded-lg border border-white/10;
+    aspect-ratio: 16 / 9;
+    min-height: 360px;
+}

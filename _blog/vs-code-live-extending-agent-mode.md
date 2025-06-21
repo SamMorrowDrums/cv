@@ -4,7 +4,6 @@ date: '2025-06-21T00:00:00.000Z'
 slug: 'vs-code-live-extending-agent-mode'
 ---
 
-# VS Code Live: Extending Agent Mode
 
 <p><iframe allow="monetization" class="embedly-embed" src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FT44T55wvDD0%3Ffeature%3Doembed&amp;display_name=YouTube&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DT44T55wvDD0&amp;image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FT44T55wvDD0%2Fhqdefault.jpg&amp;key=d932fa08bf1f47efbbe54cb3d746839f&amp;type=text%2Fhtml&amp;schema=youtube" width="640" height="360" scrolling="no" title="YouTube embed" frameborder="0" allowfullscreen="true"></iframe></p>
 

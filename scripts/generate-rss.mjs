@@ -71,7 +71,8 @@ async function generateRss() {
     console.log('RSS feed generation complete!');
     
   } catch (error) {
-    console.error('Error generating RSS feed:', error);
+    console.error('Error generating RSS feed:', error.message);
+    console.error('Stack trace:', error.stack);
     // Don't exit with error code - let the build continue
     console.log('RSS feed generation failed, but continuing with build...');
   }

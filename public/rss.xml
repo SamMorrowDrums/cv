@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sam Morrow</title>
+    <link>https://sam-morrow.com</link>
+    <description>Drummer, software engineer and online-learning fanatic.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 28 Nov 2025 16:52:09 GMT</lastBuildDate>
+    <atom:link href="https://sam-morrow.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Building an MCP Server for reMarkable</title>
+      <link>https://sam-morrow.com/blog/building-an-mcp-server-for-remarkable</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/building-an-mcp-server-for-remarkable</guid>
+      <pubDate>Fri, 28 Nov 2025 00:00:00 GMT</pubDate>
+      <description>I&apos;ve been using reMarkable tablets since 2021...</description>
+    </item>
+    <item>
+      <title>LastMile AI Silsila Sessions: MCP at Hyperscale</title>
+      <link>https://sam-morrow.com/blog/lastmile-ai-silsila-sessions-mcp-at-scale</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/lastmile-ai-silsila-sessions-mcp-at-scale</guid>
+      <pubDate>Mon, 24 Nov 2025 00:00:00 GMT</pubDate>
+      <description>I had the pleasure of joining the LastMile AI Silsila Sessions this week, where we went deep on what it really takes to make MCP agents production-rea...</description>
+    </item>
+    <item>
+      <title>The Context - Special Episode ft. GitHub &amp; Microsoft</title>
+      <link>https://sam-morrow.com/blog/the-context-special-episode-ft-github-microsoft</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/the-context-special-episode-ft-github-microsoft</guid>
+      <pubDate>Sat, 21 Jun 2025 00:00:00 GMT</pubDate>
+      <description>Toby Padilla, Harald Kirschner and I will be live-streaming on The Context, on the MCP Developers Summit YouTube channel this coming Tuesday...</description>
+    </item>
+    <item>
+      <title>VS Code Live: Extending Agent Mode</title>
+      <link>https://sam-morrow.com/blog/vs-code-live-extending-agent-mode</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/vs-code-live-extending-agent-mode</guid>
+      <pubDate>Sat, 21 Jun 2025 00:00:00 GMT</pubDate>
+      <description>&gt; Join us for VS Code Live: Extending Agent Mode, a livestream showing how to unlock the full potential of agent mode using MCP servers and extension ...</description>
+    </item>
+    <item>
+      <title>AI Won&apos;t Make Your Job Easier—so what will it do?</title>
+      <link>https://sam-morrow.com/blog/ai-wont-make-your-job-easier</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/ai-wont-make-your-job-easier</guid>
+      <pubDate>Sat, 14 Jun 2025 00:00:00 GMT</pubDate>
+      <description>If you&apos;re like many people, the rapid rise of AI tools might bring a mix of excitement and, perhaps, some unease...</description>
+    </item>
+  </channel>
+</rss>

@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run generate-og-images && next build",
+    "build": "npm run generate-og-images && npm run generate-rss && next build",
     "build:fallback": "next build",
     "build:with-images": "node scripts/generate-og-images.mjs && next build",
-    "build:export": "npm run generate-og-images && next build",
+    "build:export": "npm run generate-og-images && npm run generate-rss && next build",
     "generate-og-images": "node scripts/generate-og-images.mjs",
+    "generate-rss": "node scripts/generate-rss.mjs",
     "start": "next start"
   },
   "dependencies": {

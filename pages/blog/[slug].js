@@ -10,7 +10,7 @@ export default function BlogPostPage({ post }) {
   const seoMeta = getBlogPostMeta(post);
   
   return (
-    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen pb-32 px-4 sm:px-8 lg:px-16 relative overflow-hidden tech-grid">
+    <div className="bg-gradient-to-br from-tech-dark via-slate-900 to-tech-slate min-h-screen pb-32 px-4 sm:px-8 lg:px-16 relative overflow-x-hidden tech-grid">
       {/* Subtle animated background pattern */}
       <div className="absolute inset-0 opacity-5 md:opacity-10">
         <div className="absolute top-20 left-20 w-32 h-32 md:w-64 md:h-64 bg-tech-blue rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
@@ -18,7 +18,7 @@ export default function BlogPostPage({ post }) {
         <div className="absolute bottom-20 left-40 w-28 h-28 md:w-56 md:h-56 bg-tech-teal rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
       </div>
       
-      <div className="container mx-auto font-sans relative z-10 max-w-full overflow-hidden">
+      <div className="container mx-auto font-sans relative z-10 max-w-full overflow-x-hidden">
         <SEO 
           title={seoMeta.title}
           description={seoMeta.description}

@@ -74,6 +74,9 @@ export default function SEO({
       <meta name="description" content={description} />
       <link rel="icon" href="/favicon.ico" />
       
+      {/* RSS Feed */}
+      <link rel="alternate" type="application/rss+xml" title="Sam Morrow - RSS Feed" href="https://sam-morrow.com/rss.xml" />
+      
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={fullUrl} />

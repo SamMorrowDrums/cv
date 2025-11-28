@@ -1,134 +1,75 @@
 @tailwind base;
 
-/* Write your own custom base styles here */
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   
   body {
     @apply font-sans antialiased;
+    @apply bg-surface text-primary;
+    @apply transition-colors duration-200;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
-  /* Subtle tech grid pattern */
-  .tech-grid {
-    background-image: 
-      linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  .dark body {
+    @apply bg-dark-surface text-dark-primary;
+  }
+
+  /* System preference detection */
+  @media (prefers-color-scheme: dark) {
+    html:not(.light) body {
+      @apply bg-dark-surface text-dark-primary;
+    }
   }
 }
 
-/* Start purging... */
 @tailwind components;
-/* Stop purging. */
 
-/* Write you own custom component styles here */
 @layer components {
-  .border-b-3 {
-    border-bottom-width: 3px;
-  }
-  
-  .gradient-border-t {
-    background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #14b8a6) left top / 100% 4px no-repeat;
-  }
-  
-  .gradient-border-t-purple {
-    background: linear-gradient(90deg, #8b5cf6, #f43f5e, #0ea5e9) left top / 100% 4px no-repeat;
+  /* Clean link styles */
+  .link {
+    @apply text-accent hover:text-accent-hover transition-colors duration-200 underline underline-offset-2;
   }
 
-  .tech-gradient {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+  .dark .link {
+    @apply text-dark-accent hover:text-dark-accent-hover;
   }
 
-  .tech-gradient-light {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 25%, #e2e8f0 50%, #cbd5e1 75%, #94a3b8 100%);
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200;
   }
 
-  .neon-border {
-    border: 1px solid transparent;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1)) padding-box,
-                linear-gradient(135deg, #0ea5e9, #8b5cf6) border-box;
+  .btn-primary {
+    @apply bg-primary text-surface hover:bg-secondary;
   }
 
-  .glass-morphism {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  .dark .btn-primary {
+    @apply bg-dark-primary text-dark-surface hover:bg-dark-secondary hover:text-dark-primary;
   }
 
-  .glass-morphism-dark {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .btn-secondary {
+    @apply border border-border text-primary hover:bg-surface-alt;
+  }
+
+  .dark .btn-secondary {
+    @apply border-dark-border text-dark-primary hover:bg-dark-surface-alt;
   }
 }
 
-/* Start purging... */
 @tailwind utilities;
-/* Stop purging. */
 
-/* Your own custom utilities */
 @layer utilities {
-  .text-shadow-sm {
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
-  }
-  
-  .text-shadow-md {
-    text-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
-  }
-  
-  .text-shadow-lg {
-    text-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
-  }
-  
-  .backdrop-blur-sm {
-    backdrop-filter: blur(4px);
-  }
-
-  .backdrop-blur-md {
-    backdrop-filter: blur(12px);
-  }
-
-  .backdrop-blur-lg {
-    backdrop-filter: blur(24px);
-  }
-
-  .glow-text {
-    text-shadow: 0 0 10px currentColor;
-  }
-
-  .glow-text-lg {
-    text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
-  }
-
-  .border-gradient {
-    border-image: linear-gradient(135deg, #0ea5e9, #8b5cf6) 1;
-  }
-
-  .hover-glow:hover {
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-    transition: box-shadow 0.3s ease;
-  }
-
-  .tech-border {
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    position: relative;
-  }
-
-  .tech-border::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(139, 92, 246, 0.3));
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    pointer-events: none;
+  /* Prose-like typography for reading */
+  .prose-reading {
+    @apply text-lg leading-relaxed;
+    max-width: 65ch;
   }
 }

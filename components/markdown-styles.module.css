@@ -1,5 +1,5 @@
 .markdown {
-    @apply text-xl leading-relaxed text-slate-300 font-medium;
+    @apply text-lg leading-relaxed text-primary;
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -9,6 +9,10 @@
 
 .markdown > * {
     max-width: 100%;
+}
+
+:global(.dark) .markdown {
+    @apply text-dark-primary;
 }
 
 .markdown p,
@@ -23,83 +27,89 @@
 }
 
 .markdown h2 {
-    @apply text-3xl font-black mt-10 mb-6 leading-snug text-white tracking-tight;
+    @apply text-2xl font-bold mt-12 mb-4 leading-snug text-primary tracking-tight;
+}
+
+:global(.dark) .markdown h2 {
+    @apply text-dark-primary;
 }
 
 .markdown h3 {
-    @apply text-2xl font-bold mt-8 mb-4 leading-snug text-white tracking-tight;
+    @apply text-xl font-semibold mt-8 mb-3 leading-snug text-primary tracking-tight;
+}
+
+:global(.dark) .markdown h3 {
+    @apply text-dark-primary;
 }
 
 .markdown ul {
-    @apply ml-8 space-y-3;
+    @apply ml-6 space-y-2;
 }
 
 .markdown li {
-    @apply list-disc text-slate-300 text-lg;
-    padding-inline-start: 0.75ch;
+    @apply list-disc text-primary;
+    padding-inline-start: 0.5ch;
+}
+
+:global(.dark) .markdown li {
+    @apply text-dark-primary;
 }
 
 .markdown strong {
-    @apply font-bold text-white;
+    @apply font-semibold text-primary;
+}
+
+:global(.dark) .markdown strong {
+    @apply text-dark-primary;
 }
 
 .markdown a {
-    @apply text-tech-blue hover:text-neon-blue transition-all duration-300 font-semibold border-b-2 border-transparent hover:border-tech-blue hover:bg-tech-blue/10 px-1 py-0.5 rounded;
+    @apply text-accent hover:text-accent-hover transition-colors duration-200 underline underline-offset-2;
     word-break: break-all;
     overflow-wrap: break-word;
 }
 
-.markdown a:hover {
-    @apply no-underline;
+:global(.dark) .markdown a {
+    @apply text-dark-accent hover:text-dark-accent-hover;
 }
 
 .markdown code {
-    @apply bg-tech-slate text-tech-blue px-3 py-1.5 rounded-lg text-lg font-mono font-semibold border border-white/10;
+    @apply bg-surface-alt text-primary px-1.5 py-0.5 rounded text-base font-mono;
     word-break: break-word;
 }
 
+:global(.dark) .markdown code {
+    @apply bg-dark-surface-alt text-dark-primary;
+}
+
 .markdown pre {
-    @apply bg-tech-slate rounded-lg p-4 my-6 border border-white/10;
+    @apply bg-surface-alt rounded-lg p-4 my-6;
     overflow-x: auto;
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
 }
 
+:global(.dark) .markdown pre {
+    @apply bg-dark-surface-alt;
+}
+
 .markdown pre code {
-    @apply bg-transparent border-0 p-0 text-base;
+    @apply bg-transparent p-0 text-sm;
     white-space: pre;
     word-break: normal;
     display: block;
 }
 
-.markdown table {
-    @apply w-full my-6 text-left border-collapse;
-    overflow-x: auto;
-    max-width: 100%;
-}
-
-.markdown thead {
-    @apply bg-tech-slate;
-}
-
-.markdown th {
-    @apply px-4 py-3 text-white font-semibold border border-white/10;
-}
-
-.markdown td {
-    @apply px-4 py-3 text-slate-300 border border-white/10;
-}
-
-.markdown tr:nth-child(even) {
-    @apply bg-tech-slate/50;
-}
-
 .markdown blockquote {
-    @apply border-l-4 border-tech-blue pl-6 italic text-slate-400 bg-tech-blue/10 py-4 rounded-r-lg border border-white/10;
+    @apply border-l-4 border-border pl-4 italic text-secondary;
+}
+
+:global(.dark) .markdown blockquote {
+    @apply border-dark-border text-dark-secondary;
 }
 
 .markdown iframe {
-    @apply w-full max-w-none rounded-lg border border-white/10;
+    @apply w-full max-w-none rounded-lg;
     aspect-ratio: 16 / 9;
     min-height: 360px;
 }
@@ -119,5 +129,52 @@
     width: 100%;
     height: 100%;
     border: 0;
-    @apply rounded-lg border border-white/10;
+    @apply rounded-lg;
+}
+
+.markdown table {
+    @apply w-full my-6 text-sm;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.markdown thead {
+    @apply bg-surface-alt;
+}
+
+:global(.dark) .markdown thead {
+    @apply bg-dark-surface-alt;
+}
+
+.markdown th,
+.markdown td {
+    @apply border border-border px-4 py-2 text-left;
+}
+
+:global(.dark) .markdown th,
+:global(.dark) .markdown td {
+    @apply border-dark-border;
+}
+
+.markdown th {
+    @apply bg-surface-alt font-semibold;
+}
+
+:global(.dark) .markdown th {
+    @apply bg-dark-surface-alt;
+}
+
+.markdown tr:nth-child(even) {
+    @apply bg-surface-alt;
+}
+
+:global(.dark) .markdown tr:nth-child(even) {
+    @apply bg-dark-surface-alt;
+}
+
+.markdown img {
+    @apply rounded-lg my-6 max-w-full h-auto;
 }

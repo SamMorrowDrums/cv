@@ -1,12 +1,8 @@
 import "../styles/index.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
-    
     // Check system preference and apply dark class if needed
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     
@@ -26,11 +22,6 @@ function MyApp({ Component, pageProps }) {
 
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
-
-  // Prevent flash of unstyled content
-  if (!mounted) {
-    return null;
-  }
 
   return <Component {...pageProps} />;
 }

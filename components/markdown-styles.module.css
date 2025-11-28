@@ -74,7 +74,6 @@
 
 .markdown table {
     @apply w-full my-6 text-left border-collapse;
-    display: block;
     overflow-x: auto;
     max-width: 100%;
 }
@@ -85,7 +84,6 @@
 
 .markdown th {
     @apply px-4 py-3 text-white font-semibold border border-white/10;
-    white-space: nowrap;
 }
 
 .markdown td {

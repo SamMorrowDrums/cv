@@ -3,6 +3,12 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.markdown > * {
+    max-width: 100%;
 }
 
 .markdown p,
@@ -49,6 +55,43 @@
 
 .markdown code {
     @apply bg-tech-slate text-tech-blue px-3 py-1.5 rounded-lg text-lg font-mono font-semibold border border-white/10;
+    word-break: break-word;
+}
+
+.markdown pre {
+    @apply bg-tech-slate rounded-lg p-4 my-6 border border-white/10;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.markdown pre code {
+    @apply bg-transparent border-0 p-0 text-base;
+    white-space: pre;
+    word-break: normal;
+    display: block;
+}
+
+.markdown table {
+    @apply w-full my-6 text-left border-collapse;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.markdown thead {
+    @apply bg-tech-slate;
+}
+
+.markdown th {
+    @apply px-4 py-3 text-white font-semibold border border-white/10;
+}
+
+.markdown td {
+    @apply px-4 py-3 text-slate-300 border border-white/10;
+}
+
+.markdown tr:nth-child(even) {
+    @apply bg-tech-slate/50;
 }
 
 .markdown blockquote {

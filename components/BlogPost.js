@@ -3,7 +3,7 @@ import markdownStyles from "./markdown-styles.module.css";
 
 export default function BlogPost({ title, date, content }) {
   return (
-    <article className="glass-morphism-dark backdrop-blur-lg border border-white/20 rounded-3xl p-6 sm:p-12 shadow-tech max-w-4xl mx-auto overflow-hidden">
+    <article className="glass-morphism-dark backdrop-blur-lg border border-white/20 rounded-3xl p-6 sm:p-12 shadow-tech mx-auto" style={{ width: '100%', maxWidth: 'min(56rem, calc(100vw - 2rem))' }}>
       <header className="mb-8 sm:mb-12">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 sm:mb-6 tracking-tight text-shadow-lg break-words">
           <span className="bg-gradient-to-r from-neon-blue via-neon-purple to-neon-teal bg-clip-text text-transparent">

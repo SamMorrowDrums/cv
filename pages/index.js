@@ -15,7 +15,7 @@ export default function Home({ experiences, projects }) {
     <Layout>
       <SEO 
         title="Sam Morrow"
-        description="Drummer, software engineer and online-learning fanatic."
+        description="Software engineer, open source contributor, always learning."
         image="/og-images/home.png"
         url=""
       />
@@ -26,7 +26,9 @@ export default function Home({ experiences, projects }) {
           Sam Morrow
         </h1>
         <p className="text-lg sm:text-xl text-secondary dark:text-dark-secondary mb-8 leading-relaxed">
-          Drummer, software engineer and online-learning fanatic.
+          I’m a Senior Software Engineer at GitHub, where I work on AI developer tools. I build and maintain the GitHub MCP Server and contribute to the MCP specification.
+I love open source, enjoy speaking about MCP at events, and maintain starter templates to help others get going with the protocol. I’m always picking up something new.
+Before I wrote code for a living, I was a professional drummer.
         </p>
         <nav className="flex flex-wrap gap-4">
           <Link 

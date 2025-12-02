@@ -1,6 +1,6 @@
 ---
 title: "GitHub Universe: MCP Server Demo"
-date: '2025-10-30T00:00:00.000Z'
+date: '2025-12-02T00:00:00.000Z'
 slug: 'github-universe-mcp-server-demo'
 ---
 
@@ -14,9 +14,11 @@ The demo covered setting up Copilot agent mode to interact with GitHub from VS C
 
 Universe was an epic and ridiculously well organised event. There was a huge buzz around MCP and I had a lot of great conversations with developers and builders exploring agent extensibility.
 
-I also attended <a href="https://resources.github.com/mcp-universe-2025/">MCP Universe</a>, a micro summit for agentic builders hosted alongside GitHub Universe. The event brought together open source contributors, startup founders, and enterprise builders to explore MCP and the agentic web. It featured panels with MCP steering committee members from Anthropic, Microsoft, and OpenAI, along with talks from FastMCP author Jeremiah Lowin and other builders in the space. I attended with Carlos Becker, maintainer of the awesome GoReleaser tool.
+I also attended <a href="https://resources.github.com/mcp-universe-2025/">MCP Universe</a>, a micro summit for agentic builders hosted alongside GitHub Universe. The event brought together open source contributors, startup founders, and enterprise builders to explore MCP and the agentic web. I attended with Carlos Becker, maintainer of the awesome GoReleaser tool.
 
-Later in the week, I attended the Figma MCP Meetup at Figma HQ. It was another great night of MCP discussion with talks from the team who built Figma's MCP server and a chance to connect with VS Code team members and other MCP adopters in person.
+The event featured an impressive lineup of speakers including David Soria Parra (Anthropic), Den Delimarsky (Microsoft), and Nick Cooper (OpenAI) from the MCP Steering Committee. We also heard from Jeremiah Lowin (FastMCP, Prefect.io), Shannon Williams (Obot), Toby Padilla (GitHub), Vitaly Gordon (Faros AI), Angie Jones (Block), Matvei Popov (Roboflow), and Cathy Di (Dedalus). The event was moderated by Rob Ferguson (Microsoft for Startups), Kevin Crosby (GitHub), and Simina Pasat (GitHub).
+
+Later in the week, I attended the Figma MCP Meetup at Figma HQ. It was another great night of MCP discussion featuring talks from Jake Albaugh and Aditya Muttur from Figma, Harald Kirschner from Microsoft, Tadas Antanavicius (PulseMCP), and Gagan Bhat from Anthropic. It was a chance to connect with VS Code team members and other MCP adopters in person.
 
 ## Other Highlights
 

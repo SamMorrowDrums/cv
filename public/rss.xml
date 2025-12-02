@@ -5,8 +5,15 @@
     <link>https://sam-morrow.com</link>
     <description>Drummer, software engineer and online-learning fanatic.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Dec 2025 08:37:43 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 02 Dec 2025 08:49:57 GMT</lastBuildDate>
     <atom:link href="https://sam-morrow.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>GitHub Universe: MCP Server Demo</title>
+      <link>https://sam-morrow.com/blog/github-universe-mcp-server-demo</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/github-universe-mcp-server-demo</guid>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 GMT</pubDate>
+      <description>I was honoured to be invited to demo the GitHub MCP Server at GitHub Universe with Toby Padilla...</description>
+    </item>
     <item>
       <title>Building an MCP Server for reMarkable</title>
       <link>https://sam-morrow.com/blog/building-an-mcp-server-for-remarkable</link>
@@ -20,13 +27,6 @@
       <guid isPermaLink="true">https://sam-morrow.com/blog/lastmile-ai-silsila-sessions-mcp-at-scale</guid>
       <pubDate>Mon, 24 Nov 2025 00:00:00 GMT</pubDate>
       <description>I had the pleasure of joining the LastMile AI Silsila Sessions this week, where we went deep on what it really takes to make MCP agents production-rea...</description>
-    </item>
-    <item>
-      <title>GitHub Universe: MCP Server Demo</title>
-      <link>https://sam-morrow.com/blog/github-universe-mcp-server-demo</link>
-      <guid isPermaLink="true">https://sam-morrow.com/blog/github-universe-mcp-server-demo</guid>
-      <pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate>
-      <description>I was honoured to be invited to demo the GitHub MCP Server at GitHub Universe with Toby Padilla...</description>
     </item>
     <item>
       <title>The Context - Special Episode ft. GitHub &amp; Microsoft</title>

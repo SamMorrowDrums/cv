@@ -5,8 +5,15 @@
     <link>https://sam-morrow.com</link>
     <description>Drummer, software engineer and online-learning fanatic.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Dec 2025 08:49:57 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Mar 2026 10:30:30 GMT</lastBuildDate>
     <atom:link href="https://sam-morrow.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Why Diffing Your MCP Server Matters</title>
+      <link>https://sam-morrow.com/blog/why-diffing-your-mcp-server-matters</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/why-diffing-your-mcp-server-matters</guid>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Your MCP server has a public interface. Tools, prompts, resources, capabilities: everything an AI client sees when it connects...</description>
+    </item>
     <item>
       <title>GitHub Universe: MCP Server Demo</title>
       <link>https://sam-morrow.com/blog/github-universe-mcp-server-demo</link>

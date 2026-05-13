@@ -11,9 +11,10 @@ export default function SEO({
   publishedTime = null
 }) {
   const siteName = 'Sam Morrow';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://sam-morrow.com';
   const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
-  const fullUrl = url ? `https://sam-morrow.com${url}` : 'https://sam-morrow.com';
-  const fullImageUrl = image.startsWith('http') ? image : `https://sam-morrow.com${image}`;
+  const fullUrl = url ? `${baseUrl}${url}` : baseUrl;
+  const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`;
   
   // Generate rectangular and square image URLs for better social media coverage
   // Since we're using static export, all images should be static files

@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build:export"
+  command = "NEXT_PUBLIC_SITE_URL=$URL npm run build:export"
   publish = "out"
 
 [build.environment]

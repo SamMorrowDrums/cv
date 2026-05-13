@@ -1,6 +1,6 @@
 ---
 title: "The Skill Dealer"
-date: '2026-05-20T00:00:00.000Z'
+date: '2026-05-13T00:00:00.000Z'
 slug: 'progressive-discovery-in-mcp-part-2'
 ---
 

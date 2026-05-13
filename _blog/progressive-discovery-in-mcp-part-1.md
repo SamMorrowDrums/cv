@@ -22,7 +22,7 @@ We tried toolsets (groups of related tools users could pick). We tried dynamic t
 
 Everyone used the default settings. The dynamic tool selection actually worked well, but it busted the model cache on every tool set change, so we stopped innovating in that direction.
 
-That was genuinely frustrating. We had elegant solutions, all they required was users to configure them. But most users don't configure things. So we took a different path: we optimised the out-of-the-box experience. We reduced the default tool count by 49%, consolidated CRUD tools, [cut output tokens by over 75%](https://github.blog/changelog/2025-09-15-github-mcp-server-0-4-leaner-outputs/) on tools like `list_pull_requests` without losing useful information.
+That was genuinely frustrating. We had elegant solutions, all they required was users to configure them. But most users don't configure things. So we took a different path: we optimised the out-of-the-box experience. We reduced the default tool count by 49%, consolidated CRUD tools, [cut output tokens by over 75%](https://github.blog/changelog/2025-10-29-github-mcp-server-now-comes-with-server-instructions-better-tools-and-more/) on tools like `list_pull_requests` without losing useful information.
 
 But that was just trimming. Collectively what we have needed to build is progressive discovery - tools that appear in the model's working set only when they're relevant to the current task. The full catalog exists, but the model sees a curated surface. You pay context tokens only for what you actually use.
 

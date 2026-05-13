@@ -1,4 +1,4 @@
-C---
+---
 title: "Three Is Not Redundancy"
 date: '2026-06-10T00:00:00.000Z'
 slug: 'progressive-discovery-in-mcp-part-5'

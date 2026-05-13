@@ -1,7 +1,9 @@
-cli art---
+---
+
 title: "MCP Doesn't Have a Context Problem"
 date: '2026-05-13T00:00:00.000Z'
 slug: 'progressive-discovery-in-mcp-part-1'
+
 ---
 
 ![Three figures in a dark, Sandman-esque realm - The Skill Dealer, The Nuclear Football, and Codey C. Maude - standing before swirling constellations of MCP tool connections](/images/progressive-discovery/banner.webp)
@@ -113,6 +115,7 @@ This is Part 1 of 5. The rest of the series covers each tier in depth:
 **If you use agents**, these experiments should help you save money on tokens and have smoother agent runs by keeping only relevant tools in context.
 
 MCP doesn't have a context problem. It has a solution awareness problem. And the pieces of the puzzle required to solve it are mostly already in the protocol.
+
 ---
 
 *Have thoughts on this article or progressive discovery in MCP in general? I opened a* [*discussion on GitHub*](https://github.com/SamMorrowDrums/cv/discussions/63) *for this series.*

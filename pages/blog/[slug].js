@@ -3,7 +3,7 @@ import Layout from "../../components/Layout";
 import { getDocumentBySlug, getSlugs, blogDirectory } from "../../lib/api";
 import markdownToHtml from "../../lib/markDownToHtml";
 import SEO from "../../components/SEO";
-import { getBlogPostMeta } from "../../lib/seo";
+import { getBlogPostMeta, extractFirstImage } from "../../lib/seo";
 
 export default function BlogPostPage({ post }) {
   const seoMeta = getBlogPostMeta(post);
@@ -27,6 +27,7 @@ export default function BlogPostPage({ post }) {
 
 export async function getStaticProps({ params }) {
   const post = getDocumentBySlug(params.slug, blogDirectory);
+  const firstImage = extractFirstImage(post.content);
   const content = await markdownToHtml(post.content || "");
 
   return {
@@ -34,6 +35,7 @@ export async function getStaticProps({ params }) {
       post: {
         ...post,
         content,
+        ...(firstImage && { image: firstImage }),
       },
     },
   };

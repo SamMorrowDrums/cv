@@ -5,7 +5,7 @@ const nextConfig = {
   output: 'export',
   // Use Netlify deploy URL or production URL
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.URL || 'https://sam-morrow.com',
+    NEXT_PUBLIC_SITE_URL: process.env.DEPLOY_PRIME_URL || process.env.URL || 'https://sam-morrow.com',
   },
   // Ensure proper static generation
   generateEtags: true,

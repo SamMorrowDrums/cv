@@ -27,7 +27,6 @@ export default function BlogPostPage({ post }) {
 
 export async function getStaticProps({ params }) {
   const post = getDocumentBySlug(params.slug, blogDirectory);
-  const firstImage = extractFirstImage(post.content);
   const content = await markdownToHtml(post.content || "");
 
   return {
@@ -35,7 +34,6 @@ export async function getStaticProps({ params }) {
       post: {
         ...post,
         content,
-        ...(firstImage && { image: firstImage }),
       },
     },
   };

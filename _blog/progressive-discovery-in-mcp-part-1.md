@@ -8,7 +8,7 @@ slug: 'progressive-discovery-in-mcp-part-1'
 
 ![Three figures in a dark, Sandman-esque realm - The Skill Dealer, The Nuclear Football, and Codey C. Maude - standing before swirling constellations of MCP tool connections](/images/progressive-discovery/banner.webp)
 
-Mario Zechner wrote a post last year called ["What if you don't need MCP?"](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/). I like Mario. I watched him speak at AI Engineer Europe and was genuinely inspired by his approach to [Pi](https://github.com/nicholasgasior/pi) - the simplicity of it, the emphasis on doing your own context engineering, the "I was just crazy enough to build this" energy. He makes strong arguments about composability, bash fluency, and the tax that large MCP tool schemas impose on agents.
+Mario Zechner wrote a post last year called ["What if you don't need MCP?"](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/). I like Mario. I watched him speak at AI Engineer Europe and was genuinely inspired by his approach to [Pi](https://pi.dev/) - the simplicity of it, the emphasis on doing your own context engineering, the "I was just crazy enough to build this" energy. He makes strong arguments about composability, bash fluency, and the tax that large MCP tool schemas impose on agents.
 
 But I think he's wrong about the conclusion, and I think a lot of people are making the same mistake: conflating the laziest possible MCP implementation with the protocol itself.
 
@@ -36,7 +36,7 @@ I got bored waiting for others, so I finally built the thing I kept talking abou
 
 ## Three tiers, three characters
 
-[mcpi](https://github.com/SamMorrowDrums/mcpi) is an experimental fork of [pi](https://github.com/nicholasgasior/pi) + [extension](https://github.com/SamMorrowDrums/mcpi-ext) that implements three complementary strategies for progressive tool discovery. Each pays only the context tokens it needs. Each handles a different shape of work. And because the best ideas deserve characters, each has a name.
+[mcpi](https://github.com/SamMorrowDrums/mcpi) is an experimental fork of [pi](https://pi.dev/) + [extension](https://github.com/SamMorrowDrums/mcpi-ext) that implements three complementary strategies for progressive tool discovery. Each pays only the context tokens it needs. Each handles a different shape of work. And because the best ideas deserve characters, each has a name.
 
 | Tier | Name | Mechanism | Best for |
 | --- | --- | --- | --- |

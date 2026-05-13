@@ -3,7 +3,7 @@ import Layout from "../../components/Layout";
 import { getDocumentBySlug, getSlugs, blogDirectory } from "../../lib/api";
 import markdownToHtml from "../../lib/markDownToHtml";
 import SEO from "../../components/SEO";
-import { getBlogPostMeta } from "../../lib/seo";
+import { getBlogPostMeta, extractFirstImage } from "../../lib/seo";
 
 export default function BlogPostPage({ post }) {
   const seoMeta = getBlogPostMeta(post);

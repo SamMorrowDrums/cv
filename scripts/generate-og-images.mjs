@@ -200,6 +200,57 @@ async function generateOGImage(title, outputPath, subtitle = 'Blog Post', format
   }
 }
 
+// Generate OG image from a content image (letterboxed to OG dimensions)
+async function generateOGImageFromContent(imagePath, outputPath, format = 'rectangular') {
+  try {
+    const isSquare = format === 'square';
+    const width = 1200;
+    const height = isSquare ? 1200 : 630;
+    
+    const publicDir = path.join(process.cwd(), 'public');
+    const fullImagePath = path.join(publicDir, imagePath);
+    
+    if (!fs.existsSync(fullImagePath)) {
+      return false;
+    }
+    
+    const ext = path.extname(fullImagePath).toLowerCase();
+    const isPng = ext === '.png';
+    const bgColor = isPng ? { r: 0, g: 0, b: 0, alpha: 0 } : { r: 31, g: 41, b: 55, alpha: 1 }; // transparent or charcoal
+    
+    let pngBuffer = await sharp(fullImagePath)
+      .resize(width, height, {
+        fit: 'contain',
+        background: bgColor,
+      })
+      .png({ compressionLevel: 9 })
+      .toBuffer();
+    
+    // Ensure under 100KB
+    if (pngBuffer.length > 100 * 1024) {
+      pngBuffer = await sharp(fullImagePath)
+        .resize(width, height, {
+          fit: 'contain',
+          background: bgColor,
+        })
+        .png({ compressionLevel: 9, quality: 60 })
+        .toBuffer();
+    }
+    
+    const dir = path.dirname(outputPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    
+    fs.writeFileSync(outputPath, pngBuffer);
+    console.log(`Generated OG image from content: ${outputPath} (${Math.round(pngBuffer.length / 1024)}KB)`);
+    return true;
+  } catch (error) {
+    console.warn(`Failed to generate OG from content image: ${error.message}`);
+    return false;
+  }
+}
+
 // Main function to generate all OG images
 async function generateAllOGImages() {
   console.log('Starting OG image generation...');
@@ -213,8 +264,9 @@ async function generateAllOGImages() {
   }
   
   try {
-    // Import the ES6 module
+    // Import the ES6 modules
     const { getAllBlogPosts } = await import('../lib/api.js');
+    const { extractFirstImage } = await import('../lib/seo.js');
     
     // Get all blog posts
     const blogPosts = getAllBlogPosts();
@@ -228,9 +280,18 @@ async function generateAllOGImages() {
       const outputPathSquare = path.join(ogImagesDir, filenameSquare);
       
       try {
-        // Generate rectangular version
+        // Check if post has a content image
+        const contentImage = extractFirstImage(post.content);
+        
+        if (contentImage && !contentImage.startsWith('http')) {
+          // Use the content image, letterboxed to OG dimensions
+          const usedRect = await generateOGImageFromContent(contentImage, outputPathRect, 'rectangular');
+          const usedSquare = await generateOGImageFromContent(contentImage, outputPathSquare, 'square');
+          if (usedRect && usedSquare) continue;
+        }
+        
+        // Fallback to generated SVG OG image
         await generateOGImage(post.title, outputPathRect, 'Blog Post', 'rectangular');
-        // Generate square version
         await generateOGImage(post.title, outputPathSquare, 'Blog Post', 'square');
       } catch (error) {
         console.warn(`Failed to generate OG images for ${post.slug}:`, error.message);

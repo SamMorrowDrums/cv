@@ -76,6 +76,8 @@ While I was looking through PRs I also went through the forks. A handful have su
 - **[ghbryant/remarkable-mcp](https://github.com/ghbryant/remarkable-mcp)** — SSH reconnection on dropped connections. The kind of thing the upstream server probably should do.
 - **[pschitte/remarkable-mcp](https://github.com/pschitte/remarkable-mcp)** — a Guix channel with package definitions. Different distribution angle.
 
+And one that isn't a server improvement at all but is worth mentioning: **[travisparkerm/remarkable-mcp](https://github.com/travisparkerm/remarkable-mcp)** has been turned into "reMarkable Podcast" — a web app that pulls handwritten notes off your tablet, OCRs them with Google Vision, generates a podcast script with Claude in one of six personality styles, and produces an MP3 episode with ElevenLabs TTS. Google OAuth login, daily episode generation, voice matching. A nice example of remarkable-mcp being treated as a building block.
+
 If anyone running one of these wants to upstream parts of it, please do. The MyScript backend and the cloud-tree cache in particular look like things the project would benefit from.
 
 ## What's Next

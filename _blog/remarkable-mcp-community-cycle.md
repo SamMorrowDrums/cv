@@ -64,6 +64,20 @@ No tool signatures or response shapes changed across any of this.
 
 Same pattern as last cycle. One Copilot CLI autopilot session per fix, on its own branch, regression test required before the PR opens, merged in dependency order. The async-blocking fix is a decent example: it touched almost every tool handler, but with a clear acceptance test (the concurrent-browse overlap assertion) it could be developed in parallel with the other two v0.9.1 fixes and merged without conflict.
 
+## In the Forks
+
+While I was looking through PRs I also went through the forks. A handful have substantial divergence worth calling out — different enough that they're effectively answering some of the open issues independently:
+
+- **[vgmakeev/remarkable-myscript-mcp](https://github.com/vgmakeev/remarkable-myscript-mcp)** — a full MyScript OCR backend, with stroke-line grouping, parallel batching across CPU cores, smart image splitting, and an `EmbeddedResource` output format for Claude vision. A serious answer to [#25 (OCR providers)](https://github.com/SamMorrowDrums/remarkable-mcp/issues/25).
+- **[sschimmel/remarkable-mcp](https://github.com/sschimmel/remarkable-mcp)** — OpenRouter and xAI OCR backends, plus a document-tree cache that avoids 25–35s cloud refetches per call, plus a `--fetch-notebook` CLI for batch consumers. Also #25, also touches [#28 (performance)](https://github.com/SamMorrowDrums/remarkable-mcp/issues/28).
+- **[adaofeliz/remarkable-mcp](https://github.com/adaofeliz/remarkable-mcp)** — a shared document snapshot cache and parallelized cloud metadata fetch with bounded concurrency, with live integration tests and a Cloud Mode Architecture write-up in the README. Squarely at #28.
+- **[zachattack323/remarkable-mcp](https://github.com/zachattack323/remarkable-mcp)** — a Cloud Run deployment entrypoint, with the FastMCP host/port/SSE-path plumbing needed to make that actually work behind a managed runtime.
+- **[rsampaio/remarkable-mcp](https://github.com/rsampaio/remarkable-mcp)** — switches Google Vision auth from API key to Application Default Credentials, plus render/OCR quality tweaks from the SVG source. Also includes async fixes that overlap with the v0.9.1 work above — independently rediscovered.
+- **[ghbryant/remarkable-mcp](https://github.com/ghbryant/remarkable-mcp)** — SSH reconnection on dropped connections. The kind of thing the upstream server probably should do.
+- **[pschitte/remarkable-mcp](https://github.com/pschitte/remarkable-mcp)** — a Guix channel with package definitions. Different distribution angle.
+
+If anyone running one of these wants to upstream parts of it, please do. The MyScript backend and the cloud-tree cache in particular look like things the project would benefit from.
+
 ## What's Next
 
 remarkable-mcp is very much a side project, and I struggle to give it the attention it deserves. So contributions and bug reports genuinely help — they're often the thing that turns "I'll get to it eventually" into a shipped release. This cycle is the clearest example of that so far.

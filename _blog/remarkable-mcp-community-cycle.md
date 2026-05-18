@@ -1,48 +1,42 @@
 ---
-title: "remarkable-mcp: A Community Release Cycle"
+title: "remarkable-mcp: Three Releases, Three Community PRs"
 date: '2026-05-18T00:00:00.000Z'
 slug: 'remarkable-mcp-community-cycle'
 ---
 
-When I [first wrote about remarkable-mcp](/blog/building-an-mcp-server-for-remarkable), I closed by saying the [GitHub issues](https://github.com/SamMorrowDrums/remarkable-mcp/issues) tracked future plans: write support, more OCR providers, semantic search, export. The interesting thing is what happened next. The community didn't just comment on issues, they sent pull requests. This release cycle — [v0.8.2](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.8.2), [v0.9.0](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0), [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1) — is largely their work.
+When I [wrote about remarkable-mcp](/blog/building-an-mcp-server-for-remarkable) last time, I closed with a list of open issues: write support, more OCR providers, semantic search, export. The plan was that whichever ones got engagement would get prioritised. That's basically what happened, except other people did most of the work.
 
-## Issues as a Prioritisation Signal
+Three releases since then. [v0.8.2](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.8.2), [v0.9.0](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0), [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1). The release notes are thorough — this is the narrative around them.
 
-I opened six discussion issues after the first article: [#24 write support](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24), [#25 OCR providers](https://github.com/SamMorrowDrums/remarkable-mcp/issues/25), [#26 enhanced search](https://github.com/SamMorrowDrums/remarkable-mcp/issues/26), [#27 export](https://github.com/SamMorrowDrums/remarkable-mcp/issues/27), [#28 performance](https://github.com/SamMorrowDrums/remarkable-mcp/issues/28), [#29 reliability](https://github.com/SamMorrowDrums/remarkable-mcp/issues/29). The plan was simple: whichever ones got engagement got prioritised.
+## v0.8.2: The Bugs That Were Quietly Breaking Things
 
-That's exactly how it played out. Write support (#24) and reliability (#29) both attracted concrete proposals — and both shipped in v0.9.0. The others are still open, still useful as conversation, but without that pull from users they stay on the backlog. If you've ever wondered whether opening an issue actually does anything on a small project, here's a working example: yes, it does, and a PR does a lot more.
+Two bugs. Both worse than I realised until I went looking.
 
-## v0.8.2: Bug Fix Cleanup
+`rmc` couldn't be found when the server was installed via `uvx` ([#52](https://github.com/SamMorrowDrums/remarkable-mcp/issues/52), [#78](https://github.com/SamMorrowDrums/remarkable-mcp/issues/78), [#80](https://github.com/SamMorrowDrums/remarkable-mcp/issues/80)). It lives in the venv's `bin/` directory but isn't on `PATH`, and the `FileNotFoundError` was being swallowed in a way that also bypassed the built-in v5/v6 fallback renderers. So `uvx` users had `rmc` rendering and handwriting OCR silently broken. [@ColinSha](https://github.com/ColinSha)'s [PR #79](https://github.com/SamMorrowDrums/remarkable-mcp/pull/79) had the right resolution approach (PATH → venv bin → bare name), and that shape landed in [#82](https://github.com/SamMorrowDrums/remarkable-mcp/pull/82).
 
-Before the big release, a maintenance one. Two bugs were quietly making the server worse than it should have been:
+The second one was more embarrassing. I had been treating reMarkable's `synced: false` as "archived" ([#65](https://github.com/SamMorrowDrums/remarkable-mcp/issues/65)). `synced` actually means "local changes pushed to cloud". 27 out of 385 docs on my test tablet were invisible to the MCP server for no good reason. Now only `parent == "trash"` hides things.
 
-- **`rmc` binary not found via `uvx`** ([#52](https://github.com/SamMorrowDrums/remarkable-mcp/issues/52), [#78](https://github.com/SamMorrowDrums/remarkable-mcp/issues/78), [#80](https://github.com/SamMorrowDrums/remarkable-mcp/issues/80)) — the `rmc` binary lives in the venv's `bin/` directory when installed via `uvx`, and a bare `subprocess.run(["rmc", ...])` couldn't find it. Worse, the `FileNotFoundError` was being caught in a way that also bypassed the built-in v5/v6 fallback renderers. So `uvx` users had both `rmc` rendering and handwriting OCR silently broken. **[@ColinSha](https://github.com/ColinSha)**'s [PR #79](https://github.com/SamMorrowDrums/remarkable-mcp/pull/79) had the right resolution approach, and that landed as part of [#82](https://github.com/SamMorrowDrums/remarkable-mcp/pull/82).
-- **Chrome-extension synced docs hidden** ([#65](https://github.com/SamMorrowDrums/remarkable-mcp/issues/65)) — I had been treating `synced: false` as "archived", but `synced` actually means "local changes pushed to cloud". 27 out of 385 docs on my test tablet were invisible. Now only `parent == "trash"` hides things.
+While I was in there I added a live-tablet integration suite (`--run-integration`) so this kind of thing fails loudly next time.
 
-The release also added a live-tablet integration test suite (`--run-integration`) and absorbed a stack of Dependabot bumps. Full details in the [v0.8.2 notes](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.8.2).
+## v0.9.0: Re-Implementing Three Community PRs
 
-## v0.9.0: Three Community PRs, Re-Implemented
+Three people sent good PRs against the open issues. All three shipped in v0.9.0, re-implemented to fit the design I wanted to land on, with attribution.
 
-The headline release. Three external contributors put real work into this server, and v0.9.0 ships their ideas with attribution.
+I'll say the obvious thing first: re-implementing a PR feels worse than merging it. The reason I did it three times in one release is that each one had a design decision I wanted to own — SSH-only vs adding a Go `rmapi` dependency, response shapes for merged renders, how write-tool registration interacts with transports. The original PRs are linked in the release notes, in commit trailers, and below. The ideas are theirs.
 
-### Retry + backoff for the cloud API
+### Retry and backoff for the cloud API
 
-**[@Giancarlo-therapy](https://github.com/Giancarlo-therapy)** opened [PR #75](https://github.com/SamMorrowDrums/remarkable-mcp/pull/75) addressing issue [#29](https://github.com/SamMorrowDrums/remarkable-mcp/issues/29) — transient cloud blips were hard-failing tool calls. The shipped version ([#83](https://github.com/SamMorrowDrums/remarkable-mcp/pull/83)) routes every cloud HTTP call through `_http_request_with_retry()` with:
-
-- Retries on `ConnectionError`, `Timeout`, and `429/500/502/503/504`. No 4xx retries — `401` token renewal stays the caller's job.
-- Exponential backoff with full jitter (the AWS builders'-library pattern), capped at 20s per sleep, honouring `Retry-After`.
-- Config via `REMARKABLE_RETRY_ATTEMPTS` (default `3`) and `REMARKABLE_RETRY_DELAY` (default `2.0s`).
-- Each retry logs a warning so the "it hung for a bit then worked" reports are debuggable.
+[@Giancarlo-therapy](https://github.com/Giancarlo-therapy) opened [PR #75](https://github.com/SamMorrowDrums/remarkable-mcp/pull/75) addressing [#29](https://github.com/SamMorrowDrums/remarkable-mcp/issues/29). Transient cloud blips were hard-failing tool calls and there was no reason for that. Shipped as [#83](https://github.com/SamMorrowDrums/remarkable-mcp/pull/83): every cloud HTTP call now goes through `_http_request_with_retry()`. Retries on `ConnectionError`, `Timeout`, and `429/500/502/503/504`. No 4xx retries — `401` token renewal stays the caller's job. Exponential backoff with full jitter (the AWS builders'-library pattern), capped at 20 seconds, honours `Retry-After`. Tunable via `REMARKABLE_RETRY_ATTEMPTS` and `REMARKABLE_RETRY_DELAY`. Each retry logs a warning so "it hung for a bit then worked" reports are debuggable.
 
 ### Merged PDF + annotation rendering
 
-**[@ColinSha](https://github.com/ColinSha)**'s [PR #79](https://github.com/SamMorrowDrums/remarkable-mcp/pull/79) (the same PR that provided the `rmc` resolution fix in v0.8.2) tackled something I'd wanted for ages: making MCP clients see what the user actually sees on the device. Annotations on a PDF aren't useful in isolation — they need the page underneath.
+[@ColinSha](https://github.com/ColinSha)'s [PR #79](https://github.com/SamMorrowDrums/remarkable-mcp/pull/79) — the same PR that got the `rmc` resolution into v0.8.2 — also added something I'd been meaning to add for ages. An annotation on its own isn't useful; you need the page underneath.
 
-Shipped as [#84](https://github.com/SamMorrowDrums/remarkable-mcp/pull/84): an opt-in `render_merged` parameter on `remarkable_image`. When `True` and the document has a source PDF, the PDF page is rasterized and annotations are alpha-composited on top. Output canvas is the **union** of (PDF page bounds, rmc content bounds), so reMarkable's "added pages" past the PDF end aren't clipped. Default off, existing callers see no change, merged output gets its own `.merged.png` resource URI. While verifying on a live tablet I also caught that the SSH `download()` path was missing `{uuid}.pdf` and `{uuid}.epub` files — fixed in the same PR.
+Shipped as [#84](https://github.com/SamMorrowDrums/remarkable-mcp/pull/84): an opt-in `render_merged` parameter on `remarkable_image`. When `True` and the document has a source PDF, the PDF page is rasterized and the annotations are alpha-composited on top. The output canvas is the **union** of the PDF page bounds and the rmc content bounds, so user-added pages past the end of the PDF don't get clipped. Default off, no existing callers affected, merged output gets its own `.merged.png` resource URI. While verifying on a live tablet I also caught that the SSH `download()` path was missing `{uuid}.pdf` and `{uuid}.epub` files — fixed in the same PR.
 
 ### Opt-in write tools
 
-**[@McSchnizzle](https://github.com/McSchnizzle)**'s [PR #70](https://github.com/SamMorrowDrums/remarkable-mcp/pull/70) addressed [#24](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24) directly: write support. Shipped as [#85](https://github.com/SamMorrowDrums/remarkable-mcp/pull/85), five new tools:
+[@McSchnizzle](https://github.com/McSchnizzle)'s [PR #70](https://github.com/SamMorrowDrums/remarkable-mcp/pull/70) was the big one — write support, addressing [#24](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24). Shipped as [#85](https://github.com/SamMorrowDrums/remarkable-mcp/pull/85): five new tools.
 
 | Tool | Transports |
 |------|------------|
@@ -52,28 +46,26 @@ Shipped as [#84](https://github.com/SamMorrowDrums/remarkable-mcp/pull/84): an o
 | `remarkable_rename` | SSH |
 | `remarkable_delete` | SSH |
 
-Off by default. Enable with `REMARKABLE_ENABLE_WRITE=1` or `--write`. Implemented purely via SSH/USB web (no Go `rmapi` dependency), then `upload` was extended to USB web as well. All five carry `ToolAnnotations(readOnlyHint=False)` and `remarkable_delete` additionally `destructiveHint=True`, so write-blocked agent harnesses correctly never see them. Server `instructions` only mention write tools when they're actually enabled.
+Off by default. Enable with `REMARKABLE_ENABLE_WRITE=1` or `--write`. All five carry `ToolAnnotations(readOnlyHint=False)`, and `remarkable_delete` adds `destructiveHint=True`, so agent harnesses with write-blocking enabled never see them. The server `instructions` only mention the write tools when they're enabled. No Go `rmapi` dependency — everything goes through SSH and USB web.
 
-### Why re-implement instead of merging directly
+## v0.9.1: What End-User Testing Caught
 
-Worth a sentence on this, because it could otherwise read as ungenerous. All three PRs were good. The reason I re-implemented rather than merged is design surface: I wanted SSH-only (no Go `rmapi` dependency), I wanted write-tool registration to be transport-aware not just env-var-aware, I wanted the merged-rendering output shape to be additive rather than mutating existing responses. Re-implementing let me own those choices without losing the original credit — the PR descriptions, commit trailers, and release notes all point back at the people who did the original work. Five new tools, four bug fixes, four CVE bumps. [Full v0.9.0 notes here.](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0)
+v0.9.0 shipped. Real testing immediately turned up three bugs. All three fixed and re-released within hours.
 
-## v0.9.1: The Honest Post-Release Bug Fix
+**Search was returning per-document `"not coroutine"` errors** ([#86](https://github.com/SamMorrowDrums/remarkable-mcp/pull/86)). `remarkable_search` was a sync function calling the async `remarkable_read` without `await`, then passing the returned coroutine to `json.loads`. The literal error string was *"the JSON object must be str, bytes or bytearray, not coroutine"*. The kind of bug you can only see when search is actually called against multiple documents. Now async, with a regression test.
 
-v0.9.0 shipped. End-user testing immediately surfaced three bugs. All three fixed and re-released within hours as [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1):
+**USB + write was registering tools that always errored** ([#87](https://github.com/SamMorrowDrums/remarkable-mcp/pull/87)). In `--usb --write` mode, all five write tools registered but four of them returned `ssh_required` at call time. Registration is now gated on the active transport: USB + write gets only `remarkable_upload`, SSH + write gets all five, cloud + write is a no-op.
 
-1. **`remarkable_search` returned `"not coroutine"` errors per document** ([#86](https://github.com/SamMorrowDrums/remarkable-mcp/pull/86)). A sync function was calling the async `remarkable_read` without `await` and passing the returned coroutine to `json.loads`. Literal error string: *"the JSON object must be str, bytes or bytearray, not coroutine"*. The kind of bug you don't catch until search is called with multiple results. Now `async`, with a regression test.
-2. **USB + write registered SSH-only tools that always errored** ([#87](https://github.com/SamMorrowDrums/remarkable-mcp/pull/87)). With `--usb --write`, all five write tools registered but four of them returned `ssh_required` at call time — polluting tool lists and confusing agents. Registration is now gated on the active transport: USB + write gets only `remarkable_upload`, SSH + write gets all five, cloud + write is a no-op.
-3. **Server appeared to hang under parallel tool calls** ([#88](https://github.com/SamMorrowDrums/remarkable-mcp/pull/88)). The interesting one. FastMCP awaits async tool handlers directly on the asyncio event loop, but our handlers were doing blocking I/O — `subprocess.run` for SSH, `requests` HTTP, `pymupdf` / `cairosvg` rendering, `pytesseract` OCR, `zipfile` extraction — inside `async def`. A single slow call blocked every concurrent `call_tool` until it finished. Fixed with a new `remarkable_mcp/concurrency.py` exposing `run_blocking()` over `asyncio.to_thread`, every blocking call site now `await run_blocking(...)`, and `remarkable_browse` / `remarkable_recent` / `remarkable_status` converted from `def` → `async def` (FastMCP doesn't offload sync handlers either). Regression test runs two concurrent browses with a mocked 0.4s delay and asserts they actually overlap.
+**The server appeared to hang under parallel tool calls** ([#88](https://github.com/SamMorrowDrums/remarkable-mcp/pull/88)). This was the interesting one. FastMCP awaits async tool handlers directly on the event loop, but our handlers were doing blocking I/O — `subprocess.run` for SSH, `requests` HTTP, `pymupdf` and `cairosvg` rendering, `pytesseract` OCR, `zipfile` extraction — inside `async def`. A single slow call blocked every concurrent `call_tool` request until it finished. Fixed with a new `concurrency.run_blocking()` wrapper over `asyncio.to_thread`, every blocking site now `await`s through it, and `remarkable_browse` / `remarkable_recent` / `remarkable_status` converted from `def` to `async def` (FastMCP doesn't offload sync handlers either). Regression test runs two concurrent browses with a mocked 0.4s delay and asserts they actually overlap.
 
-This is what fast iteration on a small project looks like. The integration tests caught what could be caught with mocks; live tablets caught the rest. No tool signatures or response shapes changed.
+No tool signatures or response shapes changed across any of this.
 
-## How it Got Built
+## How It Was Built
 
-Same workflow as last cycle, refined. The three v0.9.0 features and the three v0.9.1 bug fixes were each run as a parallel Copilot CLI autopilot session — one branch per fix, regression tests required before a PR opened, merged in dependency order. The async-bug fix is a good example: it touched almost every tool handler, but because it was scoped to a single session with a clear acceptance test (the concurrent-browse overlap test), it could be developed in parallel with the other two v0.9.1 fixes and merged without conflict.
+Same pattern as last cycle. One Copilot CLI autopilot session per fix, on its own branch, regression test required before the PR opens, merged in dependency order. The async-blocking fix is a decent example: it touched almost every tool handler, but with a clear acceptance test (the concurrent-browse overlap assertion) it could be developed in parallel with the other two v0.9.1 fixes and merged without conflict.
 
-The pattern that keeps holding up: small server, tight scope, real users, tests gate everything. The AI assistance is a force multiplier on top of that, not a substitute for it.
+## What's Next
 
-## Thanks
+The pattern from last time still holds: the [issues](https://github.com/SamMorrowDrums/remarkable-mcp/issues) that get engagement get prioritised. Write support (#24) and reliability (#29) both shipped this cycle because people brought concrete proposals. OCR providers (#25), enhanced search (#26), export (#27), and performance (#28) are still open. If you've got a use case for one of them, comment on the issue — or send a PR. This cycle made it pretty clear that works.
 
-Genuine thanks to [@Giancarlo-therapy](https://github.com/Giancarlo-therapy), [@ColinSha](https://github.com/ColinSha), and [@McSchnizzle](https://github.com/McSchnizzle). Three thoughtful PRs, three issues moved from "open with comments" to "shipped and used". If you're running into something on the [issues page](https://github.com/SamMorrowDrums/remarkable-mcp/issues) — or just want a feature — open one, or better, send a PR. This release shows it works.
+Thanks to [@Giancarlo-therapy](https://github.com/Giancarlo-therapy), [@ColinSha](https://github.com/ColinSha), and [@McSchnizzle](https://github.com/McSchnizzle).

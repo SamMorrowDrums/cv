@@ -1,12 +1,12 @@
 ---
-title: "remarkable-mcp: Three Releases, Three Community PRs"
+title: "remarkable-mcp: Two Releases, Three Community PRs"
 date: '2026-05-18T00:00:00.000Z'
 slug: 'remarkable-mcp-community-cycle'
 ---
 
 When I [wrote about remarkable-mcp](/blog/building-an-mcp-server-for-remarkable) last time, I closed with a list of open issues: write support, more OCR providers, semantic search, export. The plan was that whichever ones got engagement would get prioritised. That's basically what happened, except other people did most of the work.
 
-Three releases since then. [v0.8.2](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.8.2), [v0.9.0](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0), [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1). The release notes are thorough — this is the narrative around them.
+Two published releases since then: [v0.8.2](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.8.2) and [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1). I tagged a [v0.9.0](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0) in between but didn't end up publishing it — end-user testing caught three bugs before it went out, so v0.9.1 is what actually shipped, bundling all of it. The release notes are thorough — this is the narrative around them.
 
 ## v0.8.2: The Bugs That Were Quietly Breaking Things
 
@@ -18,23 +18,27 @@ The second one was more embarrassing. I had been treating reMarkable's `synced: 
 
 While I was in there I added a live-tablet integration suite (`--run-integration`) so this kind of thing fails loudly next time.
 
-## v0.9.0: Re-Implementing Three Community PRs
+## v0.9.1: Three Community PRs and Three Bugs
 
-Three people sent good PRs against the open issues. All three shipped in v0.9.0, re-implemented with attribution.
+This release is where most of the cycle's work landed. I'd tagged it as v0.9.0 first, with the three community PRs in it; end-user testing immediately caught three bugs, so the actual published release is v0.9.1, bundling everything together. The release notes are split across [v0.9.0](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.0) (the community PRs) and [v0.9.1](https://github.com/SamMorrowDrums/remarkable-mcp/releases/tag/v0.9.1) (the bug fixes); the PyPI publish is just v0.9.1.
+
+### Re-implementing three community PRs
+
+Three people sent good PRs against the open issues. All three landed in this release, re-implemented with attribution.
 
 I'll say the honest thing first: I'd have preferred to review each PR properly, work through the design back-and-forth with the author, and merge. Each one had specific requirements and details I wanted to make sure ended up in the final code — SSH-only vs adding a Go `rmapi` dependency, response shapes for merged renders, how write-tool registration interacts with transports — and a proper review loop is how you normally get those incorporated. I just didn't have the capacity for that loop three times over in this cycle. Re-implementing was the way I could absorb the ideas and land my specific requirements without blocking the release on review bandwidth I didn't have. This isn't a policy — I'd happily merge a PR straight in next time the bandwidth lines up. The original PRs are linked in the release notes, in commit trailers, and below. The ideas are theirs.
 
-### Retry and backoff for the cloud API
+#### Retry and backoff for the cloud API
 
 [@Giancarlo-therapy](https://github.com/Giancarlo-therapy) opened [PR #75](https://github.com/SamMorrowDrums/remarkable-mcp/pull/75) addressing [#29](https://github.com/SamMorrowDrums/remarkable-mcp/issues/29). Transient cloud blips were hard-failing tool calls and there was no reason for that. Shipped as [#83](https://github.com/SamMorrowDrums/remarkable-mcp/pull/83): every cloud HTTP call now goes through `_http_request_with_retry()`. Retries on `ConnectionError`, `Timeout`, and `429/500/502/503/504`. No 4xx retries — `401` token renewal stays the caller's job. Exponential backoff with full jitter (the AWS builders'-library pattern), capped at 20 seconds, honours `Retry-After`. Tunable via `REMARKABLE_RETRY_ATTEMPTS` and `REMARKABLE_RETRY_DELAY`. Each retry logs a warning so "it hung for a bit then worked" reports are debuggable.
 
-### Merged PDF + annotation rendering
+#### Merged PDF + annotation rendering
 
 [@ColinSha](https://github.com/ColinSha)'s [PR #79](https://github.com/SamMorrowDrums/remarkable-mcp/pull/79) — the same PR that got the `rmc` resolution into v0.8.2 — also added something I'd been meaning to add for ages. An annotation on its own isn't useful; you need the page underneath.
 
 Shipped as [#84](https://github.com/SamMorrowDrums/remarkable-mcp/pull/84): an opt-in `render_merged` parameter on `remarkable_image`. When `True` and the document has a source PDF, the PDF page is rasterized and the annotations are alpha-composited on top. The output canvas is the **union** of the PDF page bounds and the rmc content bounds, so user-added pages past the end of the PDF don't get clipped. Default off, no existing callers affected, merged output gets its own `.merged.png` resource URI. While verifying on a live tablet I also caught that the SSH `download()` path was missing `{uuid}.pdf` and `{uuid}.epub` files — fixed in the same PR.
 
-### Opt-in write tools
+#### Opt-in write tools
 
 [@McSchnizzle](https://github.com/McSchnizzle)'s [PR #70](https://github.com/SamMorrowDrums/remarkable-mcp/pull/70) was the big one — write support, addressing [#24](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24). Shipped as [#85](https://github.com/SamMorrowDrums/remarkable-mcp/pull/85): five new tools.
 
@@ -48,9 +52,9 @@ Shipped as [#84](https://github.com/SamMorrowDrums/remarkable-mcp/pull/84): an o
 
 Off by default. Enable with `REMARKABLE_ENABLE_WRITE=1` or `--write`. All five carry `ToolAnnotations(readOnlyHint=False)`, and `remarkable_delete` adds `destructiveHint=True`, so agent harnesses with write-blocking enabled never see them. The server `instructions` only mention the write tools when they're enabled. No Go `rmapi` dependency — everything goes through SSH and USB web.
 
-## v0.9.1: What End-User Testing Caught
+### Three bugs end-user testing caught
 
-v0.9.0 shipped. Real testing immediately turned up three bugs. All three fixed and re-released within hours.
+With the community PRs in, I cut v0.9.0 and put it through real-tablet testing. Three bugs surfaced immediately. All three fixed and folded into v0.9.1, which is what got published.
 
 **Search was returning per-document `"not coroutine"` errors** ([#86](https://github.com/SamMorrowDrums/remarkable-mcp/pull/86)). `remarkable_search` was a sync function calling the async `remarkable_read` without `await`, then passing the returned coroutine to `json.loads`. The literal error string was *"the JSON object must be str, bytes or bytearray, not coroutine"*. The kind of bug you can only see when search is actually called against multiple documents. Now async, with a regression test.
 
@@ -80,7 +84,7 @@ And one that isn't a server improvement at all but is worth mentioning: **[travi
 
 Honestly, going through these is one of my favourite parts of running a small project. People building real things for themselves — a podcast generator, a Cloud Run deployment, a MyScript OCR backend for their own handwriting — is the actual spirit of open source, and more rewarding than any star count. If you're running a fork, I'd love to hear about it. And if there's anything in yours that would help the upstream server, please do open a PR — the MyScript backend and the cloud-tree cache in particular look like things the project would benefit from.
 
-This is also why the project is MIT-licensed. I don't want compensation or restrictions, I want people to run free with it. No policy on PRs either — I'll happily merge them when the bandwidth lines up. v0.9.0 is just the honest example of what happens when it doesn't: if a PR or a fork has something I want upstream and I can't get round to the proper review loop, I may end up re-implementing it to make sure my specific requirements are in there. Not the preference, just the fallback. Same energy from both directions.
+This is also why the project is MIT-licensed. I don't want compensation or restrictions, I want people to run free with it. No policy on PRs either — I'll happily merge them when the bandwidth lines up. This cycle is just the honest example of what happens when it doesn't: if a PR or a fork has something I want upstream and I can't get round to the proper review loop, I may end up re-implementing it to make sure my specific requirements are in there. Not the preference, just the fallback. Same energy from both directions.
 
 ## What's Next
 

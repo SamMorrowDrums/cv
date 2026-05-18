@@ -22,7 +22,7 @@ While I was in there I added a live-tablet integration suite (`--run-integration
 
 Three people sent good PRs against the open issues. All three shipped in v0.9.0, re-implemented with attribution.
 
-I'll say the honest thing first: I'd have preferred to review each PR properly, work through the design back-and-forth with the author, and merge. Each one had specific requirements and details I wanted to make sure ended up in the final code — SSH-only vs adding a Go `rmapi` dependency, response shapes for merged renders, how write-tool registration interacts with transports — and a proper review loop is how you normally get those incorporated. I just didn't have the capacity for that loop three times over. Re-implementing was the way I could absorb the ideas and land my specific requirements without blocking the release on review bandwidth I didn't have. The original PRs are linked in the release notes, in commit trailers, and below. The ideas are theirs.
+I'll say the honest thing first: I'd have preferred to review each PR properly, work through the design back-and-forth with the author, and merge. Each one had specific requirements and details I wanted to make sure ended up in the final code — SSH-only vs adding a Go `rmapi` dependency, response shapes for merged renders, how write-tool registration interacts with transports — and a proper review loop is how you normally get those incorporated. I just didn't have the capacity for that loop three times over in this cycle. Re-implementing was the way I could absorb the ideas and land my specific requirements without blocking the release on review bandwidth I didn't have. This isn't a policy — I'd happily merge a PR straight in next time the bandwidth lines up. The original PRs are linked in the release notes, in commit trailers, and below. The ideas are theirs.
 
 ### Retry and backoff for the cloud API
 
@@ -80,7 +80,7 @@ And one that isn't a server improvement at all but is worth mentioning: **[travi
 
 Honestly, going through these is one of my favourite parts of running a small project. People building real things for themselves — a podcast generator, a Cloud Run deployment, a MyScript OCR backend for their own handwriting — is the actual spirit of open source, and more rewarding than any star count. If you're running a fork, I'd love to hear about it. And if there's anything in yours that would help the upstream server, please do open a PR — the MyScript backend and the cloud-tree cache in particular look like things the project would benefit from.
 
-This is also why the project is MIT-licensed. I don't want compensation or restrictions, I want people to run free with it. The honest caveat — and v0.9.0 is the example — is that side-project capacity is what it is, so if a PR or a fork has something I want in the upstream and I can't get round to the proper review loop, I may end up re-implementing it to make sure the specific requirements I have are in there. Not because I'd prefer to. Same energy from both directions.
+This is also why the project is MIT-licensed. I don't want compensation or restrictions, I want people to run free with it. No policy on PRs either — I'll happily merge them when the bandwidth lines up. v0.9.0 is just the honest example of what happens when it doesn't: if a PR or a fork has something I want upstream and I can't get round to the proper review loop, I may end up re-implementing it to make sure my specific requirements are in there. Not the preference, just the fallback. Same energy from both directions.
 
 ## What's Next
 

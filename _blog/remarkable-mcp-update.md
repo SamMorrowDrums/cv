@@ -4,11 +4,11 @@ date: '2026-05-18T00:00:00.000Z'
 slug: 'remarkable-mcp-update'
 ---
 
-Quick update on [remarkable-mcp](https://github.com/SamMorrowDrums/remarkable-mcp) since [the original post](/blog/building-an-mcp-server-for-remarkable). [Latest release is here](https://github.com/SamMorrowDrums/remarkable-mcp/releases/latest). The headline is that most of what landed came from other people, three community PRs from [@Giancarlo-therapy](https://github.com/Giancarlo-therapy), [@ColinSha](https://github.com/ColinSha), and [@McSchnizzle](https://github.com/McSchnizzle) shipped this cycle, with attribution. Re-implemented rather than merged because I didn't have the review bandwidth, not a policy, just what happened this time. The ideas are theirs.
+Quick update on [remarkable-mcp](https://github.com/SamMorrowDrums/remarkable-mcp) since [the original post](/blog/building-an-mcp-server-for-remarkable). [Latest release is here](https://github.com/SamMorrowDrums/remarkable-mcp/releases/latest). The headline is that most of what landed came from other people, three community PRs from [@Giancarlo-therapy](https://github.com/Giancarlo-therapy), [@ColinSha](https://github.com/ColinSha), and [@McSchnizzle](https://github.com/McSchnizzle) shipped recently. I m very grateful for contributions and issues opened against the project. Please continue!
 
 ## Write Support
 
-The biggest functional change. [@McSchnizzle](https://github.com/McSchnizzle)'s [PR #70](https://github.com/SamMorrowDrums/remarkable-mcp/pull/70) addressed [#24](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24) and landed as five new tools:
+The biggest functional change. [@McSchnizzle](https://github.com/McSchnizzle)'s [PR #70](https://github.com/SamMorrowDrums/remarkable-mcp/pull/70) addressed [#24](https://github.com/SamMorrowDrums/remarkable-mcp/issues/24) and landed as five new write tools:
 
 | Tool | Transports |
 |------|------------|
@@ -18,7 +18,7 @@ The biggest functional change. [@McSchnizzle](https://github.com/McSchnizzle)'s 
 | `remarkable_rename` | SSH |
 | `remarkable_delete` | SSH |
 
-Off by default. Enable with `REMARKABLE_ENABLE_WRITE=1` or `--write`. All five carry `ToolAnnotations(readOnlyHint=False)`, and `remarkable_delete` adds `destructiveHint=True`, so agent harnesses with write-blocking enabled never see them. The server `instructions` only mention the write tools when they're enabled, and registration is gated on the active transport: USB + write gets only `remarkable_upload`, SSH + write gets all five, cloud + write is a no-op. No Go `rmapi` dependency, everything goes through SSH and USB web.
+Off by default. Enable with `REMARKABLE_ENABLE_WRITE=1` or `--write`. All five carry `ToolAnnotations(readOnlyHint=False)`, and `remarkable_delete` adds `destructiveHint=True`, so agent harnesses with write-blocking/confirmation enabled will be able to use them safely, but I expect a lot of users will enable write (let me know if you want it by default). The server `instructions` only mention the write tools when they're enabled, and registration is gated on the active transport: USB + write gets only `remarkable_upload`, SSH + write gets all five, cloud + write is a no-op. I managed to avoid an `rmapi` dependency, everything goes through SSH and USB web directly.
 
 ## Seeing What the User Sees
 
@@ -97,6 +97,6 @@ Drop `--write` for read-only. Cloud-mode setup is unchanged from the [original p
 
 remarkable-mcp is very much a side project, and I struggle to give it the attention it deserves. So contributions and bug reports genuinely help, they're often the thing that turns "I'll get to it eventually" into a shipped release. This cycle is the clearest example of that so far.
 
-The pattern from last time still holds: the [issues](https://github.com/SamMorrowDrums/remarkable-mcp/issues) that get engagement get prioritised. Write support (#24) and reliability (#29) both shipped this cycle because people brought concrete proposals. OCR providers (#25), enhanced search (#26), export (#27), and performance (#28) are still open. If you've got a use case for one of them, comment on the issue, or send a PR.
+The contribution pattern from initial release seems to be working well: the [issues](https://github.com/SamMorrowDrums/remarkable-mcp/issues) that get engagement get prioritised. Write support (#24) and reliability (#29) both shipped because people brought concrete proposals. OCR providers (#25), enhanced search (#26), export (#27), and performance (#28) are still open. If you've got a use case for one of them, comment on the issue, or send a PR.
 
 Thanks again to [@Giancarlo-therapy](https://github.com/Giancarlo-therapy), [@ColinSha](https://github.com/ColinSha), and [@McSchnizzle](https://github.com/McSchnizzle).

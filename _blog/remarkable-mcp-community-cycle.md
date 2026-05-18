@@ -80,6 +80,8 @@ And one that isn't a server improvement at all but is worth mentioning: **[travi
 
 Honestly, going through these is one of my favourite parts of running a small project. People building real things for themselves — a podcast generator, a Cloud Run deployment, a MyScript OCR backend for their own handwriting — is the actual spirit of open source, and more rewarding than any star count. If you're running a fork, I'd love to hear about it. And if there's anything in yours that would help the upstream server, please do open a PR — the MyScript backend and the cloud-tree cache in particular look like things the project would benefit from.
 
+This is also why the project is MIT-licensed. I don't want compensation or restrictions, I want people to run free with it. The one caveat — and v0.9.0 is the working example — is that if I see something I like in a fork or a PR and it doesn't come back upstream, I might end up implementing it myself. That's not a threat, it's just how the upstream stays good. Same energy from both directions.
+
 ## What's Next
 
 remarkable-mcp is very much a side project, and I struggle to give it the attention it deserves. So contributions and bug reports genuinely help — they're often the thing that turns "I'll get to it eventually" into a shipped release. This cycle is the clearest example of that so far.

@@ -6,25 +6,25 @@ slug: 'progressive-discovery-in-mcp-part-2'
 
 ![A shadowy figure behind a table of glowing cards, each card inscribed with the name of an MCP tool](/images/progressive-discovery/the-skill-dealer.webp)
 
-> *The Skill Dealer does not give you what you ask for. The Skill Dealer gives you what you need - and nothing more.*
+> *The Skill Dealer does not simply overwhelm you with everything. The Skill Dealer gives you only what you need. Context is everything.*
 
 *This is Part 2 of the* [*Progressive Discovery in MCP*](/blog/progressive-discovery-in-mcp-part-1) *series.*
 
-Skills are the big idea in this series. tool-cli and Code Mode are powerful, but they're patterns any sufficiently motivated client builder could ship tomorrow. Skills over MCP are different. They change the relationship between server and client. They're an emerging spec direction that could reshape how MCP servers are designed. And they solve the problem that has been nagging me since we hit 100 tools on the GitHub MCP Server: how do you give an agent access to everything without showing it everything?
+Skills over MCP self-describing the server itself is perhaps the most novel idea idea in this whole series. `tool-cli` and Code Mode are powerful, but they're patterns any sufficiently motivated client builder could ship tomorrow. Skills over MCP are different. They change the relationship between server and client. They're an emerging spec direction that could reshape how MCP servers are designed. And they solve the problem that has been nagging me since we hit tool bloat issues on GitHub MCP Server: how do you give an agent access to everything without showing it everything?
 
 ## The problem with server instructions
 
-MCP has a feature called server instructions. When a client connects, the server can return a block of text that gets injected into the system prompt. On the GitHub MCP Server, we used this for workflow guidance, tool usage tips, error handling patterns. It was useful. It was also a monolith.
+MCP has a feature called server instructions. When a client connects, the server can return a block of text that gets injected into the system prompt. On the GitHub MCP Server, we used this for workflow guidance, tool usage tips, error handling patterns. It is both useful and it is a monolith. We do limit it by active toolsets, but that's hardly progressive discovery.
 
-Every connection paid the full cost of that text block, regardless of what the agent was about to do. Filing a bug? You still got the PR review workflow. Searching code? You still got the issue triage instructions. Server instructions are paid upfront, always, in full.
+Every agent either eats the full cost of that context, or ignores it and makes more mistakes. On top of this, it is intended to be consumed in its entirety regardless of what the agent is about to do. Filing a bug? You might still have instructions for the PR review workflow. Server instructions are paid upfront, always.
 
-The same problem applies to tools themselves. Connect to the GitHub MCP Server and your agent sees 40+ tool schemas in the system prompt. Most of them are irrelevant to what you're about to do. Prompt caching amortizes the billing cost, but cached tokens still sit in the attention window. The model is reasoning past thousands of tokens of schema it doesn't need, on every single turn.
+The same problem applies to tools themselves without intervention. Connect to the GitHub MCP Server and your agent sees 40+ tool schemas in the system prompt by default. Many of them are irrelevant to what you're about to do in any given session. Prompt caching amortizes much of the billing cost, but cached tokens still sit in the attention window. The model is reasoning past thousands of tokens of schema it doesn't need, on every single turn.
 
 ## What a skill is
 
-A [skill](https://agentskills.io/specification) is a workflow document - a name, description, and instructions for a task. Skills can be delivered in many ways; in this experiment, they're served as `skill://` resources on MCP servers. The addition that makes them interesting for progressive discovery is tool metadata - the skill declares which MCP tools it relates to, so the harness knows which tools to gate behind it.
+A [skill](https://agentskills.io/specification) is a workflow document - a name, description, and instructions for a task. Skills can be delivered in many ways; in this experiment, they're served as `skill://` resources on MCP servers. Yes MCP servers have Resources. Yes that means they have always been capable of providing arbitrary file content for models to view. Yes they could have been downloaded to temp files by default and yes, GitHub MCP Server doesn't need a get file content tool, it needs client builders to actually implement MCP Resources properly... Howver, the additions that makes agent skills over resources them interesting for progressive discovery are lazy loading by default as a widespread pattern in agents combined with the ability to provdide tool metadata via the skill frontmatter - in my `mcpi` PoC the skill declares which MCP tools it relates to, so the harness knows which tools to gate behind it.
 
-A design note: in the latest iteration, tool associations use the `metadata` field with a namespaced key (`io.modelcontextprotocol/tools`) rather than a top-level `allowed-tools` field. This keeps the skill spec clean - the MCP-specific tool gating lives in custom metadata that the skills specification already allows, so it doesn't need to wait for formal spec alignment. Clients that don't understand the metadata just ignore it.
+Tool associations use the `metadata` field with a namespaced key (`io.modelcontextprotocol/tools`), I had initially looked at overloading the top-level experimental `allowed-tools` field. In the end we decided in the MCP discord that defining our own metadata keeps the skill spec clean (and independent) - the MCP-specific tool gating lives in custom metadata that the skills specification already allows, so it doesn't need to wait for formal spec alignment. Clients that don't understand the metadata just ignore it.
 
 ```yaml
 ---
@@ -47,11 +47,13 @@ rather than posting them one at a time.
 - `pull_request_review_write` - submit the review
 ```
 
-The frontmatter is machine-readable metadata. The body is the workflow document the model receives when it loads the skill. The skill isn't just a set of tools. It's a ceremony.
+The frontmatter is machine-readable metadata. The body is the workflow document the model receives when it loads the skill. The skill isn't just a set of tools, it's the instructions too.
 
-## How deferred gating works
+All this said, there is still a problem that the astute might pick up on. Changing the tools available to the model conventionally busts the entire prompt cache by replacing the tools block at the start of the cache. Those folks would be correct, and we will explore how this can be prevented.
 
-On connection, the extension discovers all skills from all connected MCP servers via `resources/list`. It registers every tool named in any skill's `allowed-tools` with `deferred: true`. This means:
+## How deferred gating can work
+
+On connection, the extension discovers all skills from all connected MCP servers via `resources/list`. It registers every tool named in any skill's `io.modelcontextprotocol/tools` with `deferred: true`. This means:
 
 1. **The tool stays in the tools array** for grammar and dispatch. The model *can* call it.
 2. **The tool is excluded from the system prompt.** The model doesn't see the schema until a skill names it.
@@ -102,7 +104,7 @@ The [skills-as-groups proposal](https://github.com/modelcontextprotocol/experime
 
 If you're building MCP servers or clients and have opinions on how this should work, the proposal needs your input.
 
-I'm not the only one experimenting in this direction. [Ola Hungerford](https://github.com/olaservo), an MCP maintainer, has a [demo branch on the GitHub MCP Server](https://github.com/github/github-mcp-server/pull/2428) exploring bundled static skills, skill resource templates, and replacing toolset-specific server instructions with bundled skills - without the progressive discovery layer, but along the same axis. The broader skills-on-MCP idea is moving quickly in the MCP Discord, and the more clients and servers that adopt the resource convention, the cheaper experimenting with progressive discovery on top of it becomes.
+I'm not the only one experimenting in this direction. [Ola Hungerford](https://github.com/olaservo), a fellow MCP maintainer, has a [demo branch on the GitHub MCP Server](https://github.com/github/github-mcp-server/pull/2428) exploring bundled static skills, skill resource templates, and replacing toolset-specific server instructions with bundled skills - without the progressive discovery layer, but along the same axis. The broader skills-on-MCP idea is moving quickly in the MCP Discord, and the more clients and servers that adopt the resource convention, the cheaper experimenting with progressive discovery on top of it becomes.
 
 ## For MCP server developers
 

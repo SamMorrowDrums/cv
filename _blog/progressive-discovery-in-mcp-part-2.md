@@ -86,7 +86,7 @@ When you load `review-pr`, you don't just get four tools unlocked. You get instr
 
 [PR #2382](https://github.com/github/github-mcp-server/pull/2382) on the GitHub MCP Server replaces server instructions with skill resources. Twenty-seven skills, each mapping a user workflow to a specific set of tools with specific guidance: `create-pr`, `review-pr`, `triage-issues`, `debug-ci`, `security-audit`, `prepare-release`, and more.
 
-A [test ensures every tool is covered](https://github.com/github/github-mcp-server/pull/2382/files#diff-skill_resources_test) by at least one skill. You can't ship a tool without thinking about which workflow it belongs to. You can't add a skill without writing the instructions that make it useful. The skill is the unit of quality, not the tool.
+A [test ensures every tool is covered](https://github.com/github/github-mcp-server/blob/sammorrowdrums/structured-output-schemas/pkg/github/skill_resources_test.go) by at least one skill. You can't ship a tool without thinking about which workflow it belongs to. You can't add a skill without writing the instructions that make it useful. The skill is the unit of quality, not the tool.
 
 ## Why this forces better server design
 
@@ -101,6 +101,8 @@ It's also backward-compatible. Clients that don't support skills just ignore the
 The [skills-as-groups proposal](https://github.com/modelcontextprotocol/experimental-ext-grouping/pull/13) is open for discussion on the MCP experimental extensions repo. This is an emerging spec direction, not a ratified standard. I think it could become one. Skills over MCP could enable progressive discovery of the entire MCP surface, making MCP servers act as self-contained plugin systems that work everywhere the protocol does - including sandboxed remote agents, mobile apps, and environments without shell access.
 
 If you're building MCP servers or clients and have opinions on how this should work, the proposal needs your input.
+
+I'm not the only one experimenting in this direction. [Ola Hungerford](https://github.com/olaservo), an MCP maintainer, has a [demo branch on the GitHub MCP Server](https://github.com/github/github-mcp-server/pull/2428) exploring bundled static skills, skill resource templates, and replacing toolset-specific server instructions with bundled skills - without the progressive discovery layer, but along the same axis. The broader skills-on-MCP idea is moving quickly in the MCP Discord, and the more clients and servers that adopt the resource convention, the cheaper experimenting with progressive discovery on top of it becomes.
 
 ## For MCP server developers
 

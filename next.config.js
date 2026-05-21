@@ -3,9 +3,13 @@ const nextConfig = {
   // Configure for better static generation
   trailingSlash: false,
   output: 'export',
-  // Use Netlify deploy URL or production URL
+  // Use the production custom domain on production builds, fall back to
+  // the deploy-specific URL for previews/branch deploys.
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.DEPLOY_PRIME_URL || process.env.URL || 'https://sam-morrow.com',
+    NEXT_PUBLIC_SITE_URL:
+      process.env.CONTEXT === 'production'
+        ? (process.env.URL || 'https://sam-morrow.com')
+        : (process.env.DEPLOY_PRIME_URL || process.env.URL || 'https://sam-morrow.com'),
   },
   // Ensure proper static generation
   generateEtags: true,

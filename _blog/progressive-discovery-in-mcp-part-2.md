@@ -67,7 +67,7 @@ rather than posting them one at a time.
 
 The frontmatter is machine-readable metadata. The body is the workflow document the model receives when it loads the skill. The skill isn't just a set of tools, it's the instructions too.
 
-All this said, there is still the prompt cache problem. Changing the tools available to the model conventionally busts the entire prompt cache by replacing the tools block at the start of the cache. Those folks would be correct, and we will explore how this can be prevented next.
+All this said, there is still the prompt cache problem. Changing the tools available to the model conventionally busts the entire prompt cache by replacing the tools block at the start of the cache. We will explore how this can be prevented next.
 
 ## How deferred gating can work
 

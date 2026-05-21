@@ -94,7 +94,7 @@ This is subtle but critical. The tools array and system prompt **never change** 
 
 ## How this differs from Anthropic's tool search
 
-Anthropic's [tool search](https://www.anthropic.com/engineering/advanced-tool-use) is server-side search: the model queries an index, and matching tools are loaded into context via `tool_reference` blocks. It's a great solution for the "too many tools" problem, and the context savings are real. Real enough they shipped this by default in [Claude Code](https://www.linkedin.com/posts/david-soria-parra-4a78b3a_no-more-context-bloat-when-using-mcp-servers-activity-7442234007754391554-eyEW).
+Anthropic's [tool search](https://www.anthropic.com/engineering/advanced-tool-use) is server-side search: the model queries an index, and matching tools are loaded into context via `tool_reference` blocks. It's a great solution for the "too many tools" problem, and the context savings are real. Real enough they shipped this [by default in Claude Code](https://www.linkedin.com/posts/david-soria-parra-4a78b3a_no-more-context-bloat-when-using-mcp-servers-activity-7442234007754391554-eyEW).
 
 The skills approach is inspired by the same insight - defer tools and load on demand - but the invocation model is different:
 

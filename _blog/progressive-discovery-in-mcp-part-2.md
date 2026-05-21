@@ -110,8 +110,6 @@ When you load `review-pr`, you don't just get four tools unlocked. You get instr
 
 A [test ensures every tool is covered](https://github.com/github/github-mcp-server/blob/sammorrowdrums/structured-output-schemas/pkg/github/skill_resources_test.go) by at least one skill. You can't ship a tool without thinking about which workflow it belongs to. You can't add a skill without writing the instructions that make it useful. The skill is the unit of quality, not the tool.
 
-Why did I want every tool to be covered by at least one skill?
-
 ## Why this forces better server design
 
 This is the part I care most about. Server instructions were easy to write badly. You can easily dump something that is not actually useful to the model, and stuff put in the context up front doesn't have to earn the right to attention. Skills demand specificity. Each skill is a promise: "if you load this, you will have what you need to accomplish this task effectively."

@@ -181,7 +181,7 @@ Watch the conversation log: the model loads the `review-pr` skill, the gated too
 
 ## For MCP server developers
 
-If you want to try this on your own server, PR #2382 on the GitHub MCP Server is a concrete example. It adds twenty-seven `skill://` resources and structured output schemas to read-only tools. The skills replace the monolithic server instructions with targeted workflow documents. There is an addition of structured outputs to some tools to enable Code Mode and tool-cli to work with typed, machine-parseable responses rather than guessing at JSON shapes, but that will be covered in parts 3 and 4.
+If you want to try this on your own server, [PR #2382 on the GitHub MCP Server](https://github.com/github/github-mcp-server/pull/2382) is a concrete example. It adds twenty-seven `skill://` resources and structured output schemas to read-only tools. The skills replace the monolithic server instructions with targeted workflow documents. There is an addition of structured outputs to some tools to enable Code Mode and tool-cli to work with typed, machine-parseable responses rather than guessing at JSON shapes, but that will be covered in parts 3 and 4.
 
 The two things that matter most for progressive discovery compatibility:
 

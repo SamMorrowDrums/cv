@@ -5,8 +5,36 @@
     <link>https://sam-morrow.com</link>
     <description>Drummer, software engineer and online-learning fanatic.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Mar 2026 10:30:30 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 27 May 2026 13:52:58 GMT</lastBuildDate>
     <atom:link href="https://sam-morrow.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Nuclear Football</title>
+      <link>https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-3</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-3</guid>
+      <pubDate>Wed, 27 May 2026 00:00:00 GMT</pubDate>
+      <description>The Football is not a weapon. The Football is the authority to use weapons...</description>
+    </item>
+    <item>
+      <title>The Skill Dealer: Skills over MCP</title>
+      <link>https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-2</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-2</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>The Skill Dealer does not simply overwhelm you with everything. The Skill Dealer gives you only what you need. Context is everything...</description>
+    </item>
+    <item>
+      <title>remarkable-mcp Update</title>
+      <link>https://sam-morrow.com/blog/remarkable-mcp-update</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/remarkable-mcp-update</guid>
+      <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
+      <description>Quick update on remarkable-mcp since the original post. Latest release is here...</description>
+    </item>
+    <item>
+      <title>MCP Doesn&apos;t Have a Context Problem</title>
+      <link>https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-1</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/progressive-discovery-in-mcp-part-1</guid>
+      <pubDate>Wed, 13 May 2026 00:00:00 GMT</pubDate>
+      <description>Mario Zechner wrote a post last year called &quot;What if you don&apos;t need MCP. &quot;. I like Mario...</description>
+    </item>
     <item>
       <title>Why Diffing Your MCP Server Matters</title>
       <link>https://sam-morrow.com/blog/why-diffing-your-mcp-server-matters</link>
@@ -47,7 +75,7 @@
       <link>https://sam-morrow.com/blog/vs-code-live-extending-agent-mode</link>
       <guid isPermaLink="true">https://sam-morrow.com/blog/vs-code-live-extending-agent-mode</guid>
       <pubDate>Sat, 21 Jun 2025 00:00:00 GMT</pubDate>
-      <description>&gt; Join us for VS Code Live: Extending Agent Mode, a livestream showing how to unlock the full potential of agent mode using MCP servers and extension ...</description>
+      <description>Join us for VS Code Live: Extending Agent Mode, a livestream showing how to unlock the full potential of agent mode using MCP servers and extension to...</description>
     </item>
     <item>
       <title>AI Won&apos;t Make Your Job Easier—so what will it do?</title>

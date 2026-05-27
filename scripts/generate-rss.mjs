@@ -54,7 +54,7 @@ async function generateRss() {
   
   try {
     // Import the ES6 module
-    const { getAllBlogPosts } = await import('../lib/api.js');
+    const { getAllBlogPosts } = await import('../lib/api.mjs');
     
     // Get all blog posts
     const blogPosts = getAllBlogPosts();

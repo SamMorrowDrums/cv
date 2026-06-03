@@ -12,7 +12,7 @@ slug: 'progressive-discovery-in-mcp-part-4'
 
 *This is Part 4 of the Progressive Discovery in MCP series. See* [*Part 1*](/blog/progressive-discovery-in-mcp-part-1)*,* [*Part 2*](/blog/progressive-discovery-in-mcp-part-2)*, and* [*Part 3*](/blog/progressive-discovery-in-mcp-part-3)*.*
 
-I asked an agent to scan every open issue on `github/github-mcp-server` and build a label distribution. 876 issues across 9 paginated calls - roughly 450KB of JSON. None of it entered the model's context. Only the histogram came back, about 1KB. That is impossible with standard tool calling, where responses are traditionally sent directly to the model unchanged. 
+While experimenting with Code Mode, I asked an agent to scan every issue on `github/github-mcp-server` and build a label distribution. 876 issues across 9 paginated calls - roughly 5 MB of JSON. None of it entered the model's context. Only the ASCII histogram came back, about 1KB. That is impossible with standard tool calling, where responses are traditionally sent directly to the model one by one, leaving the model to assemble the end result too. Done the old-fashioned way, that wouldn't just be impossible at this scale, it would also be extremely slow. This whole series has been about reducing context wastage, reducing model roundtrips, and making agents more effective.
 
 After [Part 1](/blog/progressive-discovery-in-mcp-part-1), Mario Zechner pushed back with a line that captures the problem well: of all the supposed problems with MCP, *pipelining and keeping transforms out of context is the only one that really matters*. I think he's right, I think there are some tools where the results do need to always go direct to the model, but intermediate data should never touch the context window and certainly not in its entirety. Code Mode is certainly one shape that promise can take. tool-cli ([Part 3](/blog/progressive-discovery-in-mcp-part-3)) is another. Both rest on the same idea - an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them.
 
@@ -24,7 +24,7 @@ let page = 1;
 while (true) {
   const result = await codemode.list_issues({
     owner: "github", repo: "github-mcp-server",
-    state: "OPEN", perPage: 100, page
+    state: "ALL", perPage: 100, page
   });
   allIssues.push(...result.issues);
   if (result.issues.length < 100) break;
@@ -43,11 +43,11 @@ return Object.entries(labelCounts)
   .map(([label, count]) => ({ label, count }));
 ```
 
-Done as nine classical tool calls, that transcript carries nine \~50KB JSON blobs the model has to attend over on every subsequent turn. When you need the precise data context window compaction cannot be used, so the agent can only succeed at this task if it has enough context window available to succeed. With prompt cache it will mostly only pay for each model roundtrip's new tokens (every tool result) but the attention bill is not exactly a free lunch either and models generally degrade as the context window fills up (in speed, staying on track and in retaining/acting on all prior information). Done as code, the intermediate data lives inside the ephemeral runtime and dies there. The transcript grew with O(answer), not O(data fetched). That's the true power of Code Mode. Behold:
+Done as nine classical tool calls, that transcript carries nine \~500KB JSON blobs the model has to attend over on every subsequent turn. When you need the precise data context window compaction cannot be used, so the agent can only succeed at this task if it has enough context window available to succeed. With prompt cache it will mostly only pay for each model roundtrip's new tokens (every tool result) but the attention bill is not exactly a free lunch either and models generally degrade as the context window fills up (in speed, staying on track and in retaining/acting on all prior information). Done as code, the intermediate data lives inside the ephemeral runtime and dies there. The transcript grew with O(answer), not O(data fetched). That's the true power of Code Mode. Behold:
 
 ![Code Mode in action - 876 issues scanned, label histogram returned](/images/progressive-discovery/code-mode-histogram.png)
 
-## Standing on shoulders
+## Standing on the shoulders of giants
 
 The pattern isn't mine. Cloudflare's Kenton Varda and Sunil Pai introduced ["Code Mode" in September 2025](https://blog.cloudflare.com/code-mode/), arguing that LLMs are vastly better at writing code than at calling tools because they have seen vastly more code in training. Anthropic shipped [Programmatic Tool Calling in November 2025](https://www.anthropic.com/engineering/advanced-tool-use), running Claude-authored Python in a managed `code_execution` container alongside its sister features Tool Search Tool and Tool Use Examples. Their companion post, [code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp), reports a 98.7% token reduction on a Google Drive → Salesforce example by exposing tools as a TypeScript filesystem rather than as direct calls. Cloudflare's Matt Carey [followed up](https://blog.cloudflare.com/code-mode-mcp/) in February 2026, putting an entire API in front of an agent in roughly 1,000 tokens via two tools: `search()` and `execute()`.
 
@@ -58,7 +58,7 @@ mcpi-ext's version is a sketch by comparison. Cloudflare's runs in production on
 Here is the part I care about. In mcpi-ext the sandbox has no network. It cannot reach GitHub. When the model writes:
 
 ```javascript
-const issues = await codemode.list_issues({ owner, repo, state: "OPEN", page });
+const issues = await codemode.list_issues({ owner, repo, state: "ALL", page });
 ```
 
 `codemode.list_issues` is a *stub*. The actual MCP request happens in the harness process, dispatched through the same MCP connection that handles tool-cli and skill-gated tools. The sandbox sends a request through an [`isolated-vm`](https://github.com/laverdet/isolated-vm) `Reference` callback; the harness fulfils it and returns the typed result. The audit log still shows nine `list_issues` calls with their inputs and outputs. Rate limits still apply. HITL hooks could still fire on individual operations.
@@ -124,6 +124,65 @@ Code Mode is the pipelining payoff. tool-cli ([Part 3](/blog/progressive-discove
 If there is one thing I want this article to leave with you, it's this: an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them. Pipelining is the engineering pattern that gets you there. Structured outputs are what makes pipelining less error prone. Progressive discovery is what makes it scale. Code Mode is one shape of pipeline; MCP CLIs are another. Both are methods for keeping the model's context window for reasoning, not for data.
 
 > *"I can see everything," Codey said, eyes reflecting infinite JSON. "I just can't exfiltrate it. That's the point. That's why they trust me."*
+
+## Try it yourself
+
+If you went through the [Part 1 setup](/blog/progressive-discovery-in-mcp-part-1#try-it-yourself), [Part 2 setup](/blog/progressive-discovery-in-mcp-part-2#try-it-yourself), or [Part 3 setup](/blog/progressive-discovery-in-mcp-part-3#try-it-yourself), you already have everything you need. `mcpi-ext` ships Code Mode as a built-in tier alongside Skills and tool-cli.
+
+### 1. Install
+
+```sh
+npm install -g @sammorrowdrums/mcpi@latest @sammorrowdrums/mcpi-ext@latest @sammorrowdrums/tool-cli@latest
+```
+
+### 2. Point it at any MCP server
+
+Reuse the `~/.config/mcpi-ext/mcp.json` from earlier parts, or start with the GitHub MCP server (Code Mode needs `outputSchema` on the tools you want to chain, which the `skill-discovery` tag provides):
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server:skill-discovery",
+        "stdio"
+      ],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "your-token-here" }
+    }
+  }
+}
+```
+
+### 3. Run mcpi
+
+```sh
+mcpi --extension $(npm root -g)/@sammorrowdrums/mcpi-ext/dist/index.js \
+  --mcp-config ~/.config/mcpi-ext/mcp.json
+```
+
+### 4. Ask for something that needs computation across many calls
+
+Pagination loops, aggregations, joins. The kind of thing that would otherwise drag every page into context:
+
+> *"Across all issues in github/github-mcp-server, build me a histogram of label usage."*
+
+Watch the log: the model calls `code_search` to find the eligible read-only tools, then `code_execute` with a script that loops, aggregates, and returns a tiny result. The pages of JSON never enter its context.
+
+## For harness builders: a note on implementation
+
+Code Mode in `mcpi-ext` is a thin runtime built on three boring pieces:
+
+- **A V8 isolate** ([`isolated-vm`](https://github.com/laverdet/isolated-vm)) with no filesystem, no network, a memory cap, and a wall-clock timeout. The sandbox is the security boundary, not the model's good behaviour.
+- **An eligibility filter** that only exposes tools annotated `readOnlyHint: true` *and* shipping an `outputSchema`. Without typed outputs the script is back to free-text parsing; with them, you get real `.then()`-able values. This is why I argue [structured outputs are not optional](#eligibility-and-why-structured-outputs-are-not-optional).
+- **A callback bridge** so `codemode.<tool>(...)` inside the sandbox is a `Reference` call back into the harness process, where the actual MCP request is dispatched through the same `McpClientManager` that handles Skills and tool-cli. Same audit log, same HITL hook point, same rate limiting.
+
+The model-facing surface is two tools: `code_search` (find eligible tools by keyword, returns names + schemas) and `code_execute` (run a script with `codemode` injected). Everything else is plumbing.
+
+If you want to copy the pattern: the source lives in [`src/code-mode/`](https://github.com/SamMorrowDrums/mcpi-ext/tree/main/src/code-mode) of `mcpi-ext`. The runtime is small enough to read in an afternoon.
 
 ---
 

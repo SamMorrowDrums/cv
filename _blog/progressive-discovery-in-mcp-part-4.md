@@ -43,7 +43,7 @@ return Object.entries(labelCounts)
   .map(([label, count]) => ({ label, count }));
 ```
 
-Done as nine classical tool calls, that transcript carries nine \~500KB JSON blobs the model has to attend over on every subsequent turn. When you need the precise data context window compaction cannot be used, so the agent can only succeed at this task if it has enough context window available to succeed. With prompt cache it will mostly only pay for each model roundtrip's new tokens (every tool result) but the attention bill is not exactly a free lunch either and models generally degrade as the context window fills up (in speed, staying on track and in retaining/acting on all prior information). Done as code, the intermediate data lives inside the ephemeral runtime and dies there. The transcript grew with O(answer), not O(data fetched). That's the true power of Code Mode. Behold:
+Done as nine classical tool calls, that transcript carries nine \~500KB JSON blobs the model has to attend over on every subsequent turn. When you need the precise data context window compaction cannot be used, so the agent can only succeed at this task if it has enough context window available to succeed. Models generally degrade as the context window fills up (in speed, staying on track and in retaining/acting on all prior information). Executed as code, the intermediate data lives and dies inside the ephemeral runtime. The transcript grows with O(answer), not O(data fetched), and data fetched can be exponentially bigger, especially with data aggregations. That's the true power of Code Mode. Behold:
 
 ![Code Mode in action - 876 issues scanned, label histogram returned](/images/progressive-discovery/code-mode-histogram.png)
 

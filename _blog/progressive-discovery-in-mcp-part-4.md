@@ -18,7 +18,11 @@ That is impossible with standard tool calling, where responses are traditionally
 
 This whole series has been about reducing context wastage, reducing model roundtrips, and making agents more effective. Code Mode is undeniably an excellent way to extract those benefits for MCP.
 
-After [Part 1](/blog/progressive-discovery-in-mcp-part-1), Mario Zechner pushed back with a line that captures the problem well: of all the supposed problems with MCP, *pipelining and keeping transforms out of context is the only one that really matters*. I think he's right, I think there are some tools where the results do need to always go direct to the model, but intermediate data should never touch the context window and certainly not in its entirety. Code Mode definitely fulfils that goal. tool-cli ([Part 3](/blog/progressive-discovery-in-mcp-part-3)) is another. Both rest on the same idea - an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them.
+After [Part 1](/blog/progressive-discovery-in-mcp-part-1), Mario Zechner pushed back with a line that captures the problem well:
+
+> *Of all the supposed problems with MCP, pipelining and keeping transforms out of context is the only one that really matters.*
+
+I think he's right, I think there are some tools where the results do need to always go direct to the model, but intermediate data should never touch the context window and certainly not in its entirety. Code Mode definitely fulfils that goal. tool-cli ([Part 3](/blog/progressive-discovery-in-mcp-part-3)) is another. Both rest on the same idea - an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them.
 
 Here's the actual script the model wrote, running inside the sandbox in mcpi-ext:
 

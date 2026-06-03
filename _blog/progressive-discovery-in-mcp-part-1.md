@@ -116,7 +116,7 @@ This is Part 1 of 5. The rest of the series covers each tier in depth:
 
 MCP doesn't have a context problem. It has a solution awareness problem. And the pieces of the puzzle required to solve it are mostly already in the protocol.
 
-*Next: [Part 2: The Skill Dealer - Skills over MCP](/blog/progressive-discovery-in-mcp-part-2).*
+*Next:* [*Part 2: The Skill Dealer - Skills over MCP*](/blog/progressive-discovery-in-mcp-part-2)*.*
 
 ---
 

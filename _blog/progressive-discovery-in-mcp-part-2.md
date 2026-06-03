@@ -1,7 +1,9 @@
 ---
+
 title: "The Skill Dealer: Skills over MCP"
 date: '2026-05-20T00:00:00.000Z'
 slug: 'progressive-discovery-in-mcp-part-2'
+
 ---
 
 ![A shadowy figure behind a table of glowing cards, each card inscribed with the name of an MCP tool](/images/progressive-discovery/the-skill-dealer.webp)
@@ -38,7 +40,7 @@ I've digressed enough, what is special about skills over MCP?
 
 Skills can be delivered in many ways; in my `mcpi` experiment, they're served as `skill://` resources on MCP servers. MCP servers can trivially serve agent skills directly to agents (even ones without a filesystem), including ones that can describe how to better use subsets of their own tools etc. doesn't that sound like server instructions? Yes. And doesn't it already come with progressive discovery? Yes, that's exactly where skills over MCP can shine. Even without the addition of progressive discovery of tools, this already could allow MCP server authors to remove Server Instructions, thin out tool descriptions, and make the specific skills load bearing and get some progressive discovery benefit immediately. It's also the case that a team could ship an MCP that has an always up-to-date set of team skills without providing tools. MCP servers have always been capable of serving static file content via [Resources](https://modelcontextprotocol.io/specification/2025-11-25/server/resources), and agent builders have pretty much across the board failed to incorporate that effectively, that's not MCP's fault, but I hope Skills over MCP will be enough of a carrot that they finally course correct, and start seeing how powerful this is.
 
-> My top bugbear with this (if you'll allow me to digress), is the GitHub MCP should not have a get_file_content tool, it has [resource templates](https://modelcontextprotocol.io/specification/2025-11-25/server/resources#resource-templates) to get all revisions of all files the agent can access - the only problem? The abject failure of agent harnesses to utilise it - and the kicker is agents could trivially download file content to temp files and allow the agents to read all or part of them with correct extensions and mime types etc. so they would actually have more chance of correct first-time parsing. I will celebrate the day I delete this tool. Now back to skills.
+> My top bugbear with this (if you'll allow me to digress), is the GitHub MCP should not have a get\_file\_content tool, it has [resource templates](https://modelcontextprotocol.io/specification/2025-11-25/server/resources#resource-templates) to get all revisions of all files the agent can access - the only problem? The abject failure of agent harnesses to utilise it - and the kicker is agents could trivially download file content to temp files and allow the agents to read all or part of them with correct extensions and mime types etc. so they would actually have more chance of correct first-time parsing. I will celebrate the day I delete this tool. Now back to skills.
 
 The additions that make agent skills over MCP Resources extra interesting for progressive discovery go beyond the lazy loading of the skill itself to the bundled metadata via the skill frontmatter. Agent harnesses can be built to react to specific metadata in the skill at invocation time. In my `mcpi` PoC each skill declares which MCP tools it relates to. This allows the agent harness to gate tools until a skill is invoked. This way 1000 tools is likely fine, the model will only see a couple of them if it invokes a skill that enables the tools. You can probably see where this is going. The astute amongst you might be asking "but won't this bust the prompt cache?", and the answer is a little further down - but it can and should be a firm no.
 
@@ -192,8 +194,8 @@ The [mcpi-ext server developer guide](https://github.com/SamMorrowDrums/mcpi-ext
 
 > *"What you do not need to know," said the Skill Dealer, shuffling the deck, "you will not be burdened with knowing."*
 
-*Next: [Part 3: The Nuclear Football - tool-cli and the harness as choke point](/blog/progressive-discovery-in-mcp-part-3).*
+*Next:* [*Part 3: The Nuclear Football - tool-cli and the harness as choke point*](/blog/progressive-discovery-in-mcp-part-3)*.*
 
 ---
 
-*Have thoughts on this article or progressive discovery in MCP in general? I opened a [discussion on GitHub](https://github.com/SamMorrowDrums/cv/discussions/63) for this series.*
+*Have thoughts on this article or progressive discovery in MCP in general? I opened a* [*discussion on GitHub*](https://github.com/SamMorrowDrums/cv/discussions/63) *for this series.*

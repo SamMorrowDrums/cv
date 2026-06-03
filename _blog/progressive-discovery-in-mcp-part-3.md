@@ -1,7 +1,9 @@
 ---
+
 title: "The Nuclear Football"
 date: '2026-05-27T00:00:00.000Z'
 slug: 'progressive-discovery-in-mcp-part-3'
+
 ---
 
 ![A glowing briefcase marked tool-cli being passed between hands in a dark corridor, trailing sparks of shell commands](/images/progressive-discovery/nuclear-mcp-football.webp)
@@ -88,7 +90,7 @@ The skills approach of the [previous article](/blog/progressive-discovery-in-mcp
 
 The RPC server binds to `127.0.0.1` only. A shared secret token is generated per session and passed to the CLI via environment variable (`TOOL_CLI_TOKEN`). Every request is authenticated:
 
-```
+```javascript
 $ TOOL_CLI_TOKEN=bogus tool-cli github list_issues '{...}'
 Authentication failed: invalid or missing TOOL_CLI_TOKEN
 
@@ -115,6 +117,7 @@ What you give up vs standalone CLIs:
 - **Cold-start discovery cost**: every new agent session, the agent has to learn what it has access to. That is a core trade-off of progressive discovery and it's not free - the savings come from not paying for tools you never use, not from paying nothing.
 
 When to reach for `tool-cli`:
+
 - "I don't know what's available, let me poke around"
 - "quick one-shot filter"
 - "pipe through jq and done."
@@ -194,6 +197,9 @@ const { port, token } = await server.start();
 You don't even need this package if you prefer another language. The protocol is four JSON-RPC methods over HTTP (`listServers`, `listTools`, `describeTool`, `callTool`). The [repo README](https://github.com/SamMorrowDrums/tool-cli) has implementation examples in Go, Python, and Rust.
 
 > *They pass the Football from hand to hand. It is heavy with potential. Every tool on every server is one command away - but you must type the command yourself. And somewhere behind you, the harness is watching.*
+
+*Next:* [*Part 4: Code Mode - sandboxed code over MCP*](/blog/progressive-discovery-in-mcp-part-4)*.*
+
 ---
 
-*Have thoughts on this article or progressive discovery in MCP in general? I opened a [discussion on GitHub](https://github.com/SamMorrowDrums/cv/discussions/63) for this series.*
+*Have thoughts on this article or progressive discovery in MCP in general? I opened a* [*discussion on GitHub*](https://github.com/SamMorrowDrums/cv/discussions/63) *for this series.*

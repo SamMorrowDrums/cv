@@ -265,7 +265,7 @@ async function generateAllOGImages() {
   
   try {
     // Import the ES6 modules
-    const { getAllBlogPosts } = await import('../lib/api.js');
+    const { getAllBlogPosts } = await import('../lib/api.mjs');
     const { extractFirstImage } = await import('../lib/seo.js');
     
     // Get all blog posts

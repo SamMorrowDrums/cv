@@ -194,6 +194,8 @@ The [mcpi-ext server developer guide](https://github.com/SamMorrowDrums/mcpi-ext
 
 > *"What you do not need to know," said the Skill Dealer, shuffling the deck, "you will not be burdened with knowing."*
 
+*Next:* [*Part 3: The Nuclear Football - tool-cli and the harness as choke point*](/blog/progressive-discovery-in-mcp-part-3)*.*
+
 ---
 
 *Have thoughts on this article or progressive discovery in MCP in general? I opened a* [*discussion on GitHub*](https://github.com/SamMorrowDrums/cv/discussions/63) *for this series.*

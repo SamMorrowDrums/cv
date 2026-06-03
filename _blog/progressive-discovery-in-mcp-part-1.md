@@ -36,7 +36,7 @@ I got bored waiting for others, so I finally built the thing I kept talking abou
 
 ## Three tiers, three characters
 
-[mcpi](https://github.com/SamMorrowDrums/mcpi) is an experimental fork of [pi](https://pi.dev/) + [extension](https://github.com/SamMorrowDrums/mcpi-ext) that implements three complementary strategies for progressive tool discovery. Each pays only the context tokens it needs. Each handles a different shape of work. And because the best ideas deserve characters, each has a name.
+[mcpi](https://github.com/SamMorrowDrums/mcpi-ext) is an experimental fork of [pi](https://pi.dev/) + [extension](https://github.com/SamMorrowDrums/mcpi-ext) that implements three complementary strategies for progressive tool discovery. Each pays only the context tokens it needs. Each handles a different shape of work. And because the best ideas deserve characters, each has a name.
 
 | Tier | Name | Mechanism | Best for |
 | --- | --- | --- | --- |
@@ -115,6 +115,8 @@ This is Part 1 of 5. The rest of the series covers each tier in depth:
 **If you use agents**, these experiments should help you save money on tokens and have smoother agent runs by keeping only relevant tools in context.
 
 MCP doesn't have a context problem. It has a solution awareness problem. And the pieces of the puzzle required to solve it are mostly already in the protocol.
+
+*Next:* [*Part 2: The Skill Dealer - Skills over MCP*](/blog/progressive-discovery-in-mcp-part-2)*.*
 
 ---
 

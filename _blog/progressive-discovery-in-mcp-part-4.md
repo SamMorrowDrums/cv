@@ -186,7 +186,7 @@ Watch the log: the model calls `code_search` to find the eligible read-only tool
 
 Code Mode in [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) is a thin runtime built on three boring pieces:
 
-- **A V8 isolate** ([`isolated-vm`](https://github.com/laverdet/isolated-vm)) with no filesystem, no network, a memory cap, and a wall-clock timeout. The sandbox is the security boundary, not the model's good behaviour.
+- **A V8 isolate** ([`isolated-vm`](https://github.com/laverdet/isolated-vm)) with no filesystem, no network, a memory cap, and a wall-clock timeout. The sandbox is the security boundary, not model alignment.
 - **An eligibility filter** that only exposes tools annotated `readOnlyHint: true` *and* shipping an `outputSchema`. Without typed outputs the script is back to free-text parsing; with them, you get real `.then()`-able values. This is why I argue [structured outputs are not optional](#eligibility-and-why-structured-outputs-are-not-optional).
 - **A callback bridge** so `codemode.<tool>(...)` inside the sandbox is a `Reference` call back into the harness process, where the actual MCP request is dispatched through the same `McpClientManager` that handles Skills and tool-cli. Same audit log, same HITL hook point, same rate limiting.
 

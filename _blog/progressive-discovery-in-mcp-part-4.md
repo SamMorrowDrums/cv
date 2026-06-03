@@ -135,8 +135,6 @@ Code Mode is the pipelining payoff. tool-cli ([Part 3](/blog/progressive-discove
 
 If there is one thing I want this article to leave with you, it's this: an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them. Pipelining is the engineering pattern that gets you there. Structured outputs are what makes pipelining less error prone. Progressive discovery is what makes it scale. Code Mode is one shape of pipeline; MCP CLIs are another. Both are methods for keeping the model's context window for reasoning, not for data.
 
-> *"I can see everything," Codey said, eyes reflecting infinite JSON. "I just can't exfiltrate it. That's the point. That's why they trust me."*
-
 ## Try it yourself
 
 If you went through the [Part 1 setup](/blog/progressive-discovery-in-mcp-part-1#try-it-yourself), [Part 2 setup](/blog/progressive-discovery-in-mcp-part-2#try-it-yourself), or [Part 3 setup](/blog/progressive-discovery-in-mcp-part-3#try-it-yourself), you already have everything you need. [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) ships Code Mode as a built-in tier alongside Skills and tool-cli.
@@ -195,6 +193,8 @@ Code Mode in [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) is a thin runtim
 The model-facing surface is two tools: `code_search` (find eligible tools by keyword, returns names + schemas) and `code_execute` (run a script with `codemode` injected). Everything else is plumbing.
 
 If you want to copy the pattern: the source lives in [`src/code-mode/`](https://github.com/SamMorrowDrums/mcpi-ext/tree/main/src/code-mode) of [mcpi](https://github.com/SamMorrowDrums/mcpi-ext). The runtime is small enough to read in an afternoon.
+
+> *"I can see everything," Codey said, eyes reflecting infinite JSON. "I just can't exfiltrate it. That's the point. That's why they trust me."*
 
 ---
 

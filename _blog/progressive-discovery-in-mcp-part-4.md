@@ -55,6 +55,8 @@ mcpi-ext's version is a sketch by comparison. Cloudflare's runs in production on
 
 ## Every call still goes through the harness
 
+That said, I'm not just trying to show the potential of Code Mode for progressive discovery and output token efficiency. Effective HITL and a real audit trail demand that the actual tool calls go via the harness itself. Without that, we're back in YOLO mode territory, and we can certainly do better.
+
 Here is the part I care about. In mcpi-ext the sandbox has no network. It cannot reach GitHub. When the model writes:
 
 ```javascript

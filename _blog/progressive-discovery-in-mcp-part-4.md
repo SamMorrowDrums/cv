@@ -24,7 +24,7 @@ After [Part 1](/blog/progressive-discovery-in-mcp-part-1), Mario Zechner pushed 
 
 I agree, I think there are some tools where the results do need to always go direct to the model, but intermediate data should never touch the context window and certainly not in its entirety. Code Mode definitely fulfils that goal. tool-cli ([Part 3](/blog/progressive-discovery-in-mcp-part-3)) is another. Both rest on the same idea - an agent's transcript should grow with the size of its conclusions, not the size of the data it had to look at to reach them.
 
-Here's the actual script the model wrote, running inside the sandbox in mcpi-ext:
+Here's the actual script the model wrote, running inside the sandbox in [mcpi](https://github.com/SamMorrowDrums/mcpi-ext):
 
 ```javascript
 const allIssues = [];
@@ -61,13 +61,13 @@ Models generally degrade as the context window fills up (in speed, staying on tr
 
 The pattern isn't mine. Cloudflare's Kenton Varda and Sunil Pai introduced ["Code Mode" in September 2025](https://blog.cloudflare.com/code-mode/), arguing that LLMs are vastly better at writing code than at calling tools because they have seen vastly more code in training. Anthropic shipped [Programmatic Tool Calling in November 2025](https://www.anthropic.com/engineering/advanced-tool-use), running Claude-authored Python in a managed `code_execution` container alongside its sister features Tool Search Tool and Tool Use Examples. Their companion post, [code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp), reports a 98.7% token reduction on a Google Drive → Salesforce example by exposing tools as a TypeScript filesystem rather than as direct calls. Cloudflare's Matt Carey [followed up](https://blog.cloudflare.com/code-mode-mcp/) in February 2026, putting an entire API in front of an agent in roughly 1,000 tokens via two tools: `search()` and `execute()`.
 
-mcpi-ext's version is a sketch by comparison. Cloudflare's runs in production on Workers; Anthropic's runs at scale across the Claude API. I borrowed liberally from both. What I'm trying to show is not just the potential of Code Mode for progressive discovery and output token efficiency, but also that HITL and audit trail can and must be implementable via the harness itself.
+[mcpi](https://github.com/SamMorrowDrums/mcpi-ext)'s version is a sketch by comparison. Cloudflare's runs in production on Workers; Anthropic's runs at scale across the Claude API. I borrowed liberally from both. What I'm trying to show is not just the potential of Code Mode for progressive discovery and output token efficiency, but also that HITL and audit trail can and must be implementable via the harness itself.
 
 ## Every call still goes through the harness
 
 That said, I'm not just trying to show the potential of Code Mode for progressive discovery and output token efficiency. Effective HITL and a real audit trail demand that the actual tool calls go via the harness itself. Without that, we're back in YOLO mode territory, and we can certainly do better.
 
-Here is the part I care about. In mcpi-ext the sandbox has no network. It cannot reach GitHub. When the model writes:
+Here is the part I care about. In [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) the sandbox has no network. It cannot reach GitHub. When the model writes:
 
 ```javascript
 const issues = await codemode.list_issues({ owner, repo, state: "ALL", page });
@@ -79,7 +79,7 @@ This is the difference between *the agent ran a 60-line script and stuff happene
 
 ## Eligibility, and why structured outputs are not optional
 
-Two conditions in mcpi-ext:
+Two conditions in [mcpi](https://github.com/SamMorrowDrums/mcpi-ext):
 
 1. **`readOnlyHint: true`** - the tool can't mutate anything. You could trivially extend Code Mode to write tools, but I'd want a HITL gate first, and that wasn't in scope for this experiment.
 2. **`outputSchema` defined** - the tool returns typed, machine-parseable structured output.
@@ -113,7 +113,7 @@ The only problem I have with this is that we want the annotations and things res
 
 ## On the sandbox
 
-A real-world sandbox is a serious piece of infrastructure. I am very explicitly not building one. mcpi-ext uses [`isolated-vm`](https://github.com/laverdet/isolated-vm) (V8 isolates: 128MB memory cap, 30s timeout, \~15ms startup, no FS, no network, no Node APIs); Node's built-in `vm` module is [documented as not a security mechanism](https://nodejs.org/api/vm.html#vm-executing-javascript) and is escapable via prototype tricks. Cloudflare runs code in [Workers isolates](https://blog.cloudflare.com/code-mode/) with sub-millisecond startup. Anthropic runs code in their own managed container. They have whole teams and budgets for this. If you're going to ship Code Mode, run on someone else's sandbox.
+A real-world sandbox is a serious piece of infrastructure. I am very explicitly not building one. [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) uses [`isolated-vm`](https://github.com/laverdet/isolated-vm) (V8 isolates: 128MB memory cap, 30s timeout, \~15ms startup, no FS, no network, no Node APIs); Node's built-in `vm` module is [documented as not a security mechanism](https://nodejs.org/api/vm.html#vm-executing-javascript) and is escapable via prototype tricks. Cloudflare runs code in [Workers isolates](https://blog.cloudflare.com/code-mode/) with sub-millisecond startup. Anthropic runs code in their own managed container. They have whole teams and budgets for this. If you're going to ship Code Mode, run on someone else's sandbox.
 
 ## The honest foible
 
@@ -139,7 +139,7 @@ If there is one thing I want this article to leave with you, it's this: an agent
 
 ## Try it yourself
 
-If you went through the [Part 1 setup](/blog/progressive-discovery-in-mcp-part-1#try-it-yourself), [Part 2 setup](/blog/progressive-discovery-in-mcp-part-2#try-it-yourself), or [Part 3 setup](/blog/progressive-discovery-in-mcp-part-3#try-it-yourself), you already have everything you need. `mcpi-ext` ships Code Mode as a built-in tier alongside Skills and tool-cli.
+If you went through the [Part 1 setup](/blog/progressive-discovery-in-mcp-part-1#try-it-yourself), [Part 2 setup](/blog/progressive-discovery-in-mcp-part-2#try-it-yourself), or [Part 3 setup](/blog/progressive-discovery-in-mcp-part-3#try-it-yourself), you already have everything you need. [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) ships Code Mode as a built-in tier alongside Skills and tool-cli.
 
 ### 1. Install
 
@@ -186,7 +186,7 @@ Watch the log: the model calls `code_search` to find the eligible read-only tool
 
 ## For harness builders: a note on implementation
 
-Code Mode in `mcpi-ext` is a thin runtime built on three boring pieces:
+Code Mode in [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) is a thin runtime built on three boring pieces:
 
 - **A V8 isolate** ([`isolated-vm`](https://github.com/laverdet/isolated-vm)) with no filesystem, no network, a memory cap, and a wall-clock timeout. The sandbox is the security boundary, not the model's good behaviour.
 - **An eligibility filter** that only exposes tools annotated `readOnlyHint: true` *and* shipping an `outputSchema`. Without typed outputs the script is back to free-text parsing; with them, you get real `.then()`-able values. This is why I argue [structured outputs are not optional](#eligibility-and-why-structured-outputs-are-not-optional).
@@ -194,7 +194,7 @@ Code Mode in `mcpi-ext` is a thin runtime built on three boring pieces:
 
 The model-facing surface is two tools: `code_search` (find eligible tools by keyword, returns names + schemas) and `code_execute` (run a script with `codemode` injected). Everything else is plumbing.
 
-If you want to copy the pattern: the source lives in [`src/code-mode/`](https://github.com/SamMorrowDrums/mcpi-ext/tree/main/src/code-mode) of `mcpi-ext`. The runtime is small enough to read in an afternoon.
+If you want to copy the pattern: the source lives in [`src/code-mode/`](https://github.com/SamMorrowDrums/mcpi-ext/tree/main/src/code-mode) of [mcpi](https://github.com/SamMorrowDrums/mcpi-ext). The runtime is small enough to read in an afternoon.
 
 ---
 

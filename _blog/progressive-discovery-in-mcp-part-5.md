@@ -8,13 +8,13 @@ slug: 'progressive-discovery-in-mcp-part-5'
 
 *This is the final Part of the Progressive Discovery in MCP series. See* [*Part 1*](/blog/progressive-discovery-in-mcp-part-1)*,* [*Part 2*](/blog/progressive-discovery-in-mcp-part-2)*,* [*Part 3*](/blog/progressive-discovery-in-mcp-part-3)*, and* [*Part 4*](/blog/progressive-discovery-in-mcp-part-4)*.*
 
-I've spent four posts going deep on three tiers. This one is the synthesis. I want to make the case that having all three in one harness is cheaper than it looks, more useful than picking one, and worth doing now even though the spec is still in motion. Then I want to nudge the people who can actually move this forward: harness builders, MCP server authors, end users, and anyone with a stake in where the protocol goes next.
+I've spent four posts going deep on three approaches. This one is the synthesis. I want to make the case that having all three in one harness is cheaper than it looks, more useful than picking one, and worth doing now even though the spec is still in motion. Then I want to nudge the people who can actually move this forward: harness builders, MCP server authors, end users, and anyone with a stake in where the protocol goes next.
 
 A confession to start with. The reason this series exists at all is that I gave [a talk at MCP Dev Summit](https://www.youtube.com/watch?v=ideYDMJKujE&list=PLjULwdJUtFdhIBhibLEogtK1XYCNaFyFl&index=10) titled "MCP vs CLI is the wrong question", spent a few months waiting for harness builders to take the obvious next step, and eventually got annoyed enough to build [mcpi](https://github.com/SamMorrowDrums/mcpi-ext) myself. I'd rather have written the post-mortem than the manifesto. But here we are.
 
 ## Three shapes of work, not three competing ideas
 
-The reason for three tiers is that agents do three fundamentally different shapes of work with tools, and any single approach is bad at one or two of them.
+The reason for three approaches is that agents do three fundamentally different shapes of work with tools, and any single approach is bad at one or two of them.
 
 **Procedural** - "do the canonical thing." There's a known workflow with known steps. PR review, issue triage, release prep. This is where [Skills](/blog/progressive-discovery-in-mcp-part-2) shine. The skill encodes the ceremony. The model doesn't have to reinvent the recipe and the harness gets to load only the tools the workflow actually needs.
 
@@ -24,32 +24,34 @@ The reason for three tiers is that agents do three fundamentally different shape
 
 Most tasks lean on one of these. Some need two. The interesting ones need all three. Imagine preparing release notes for a busy repository: you follow the project's release-prep workflow (skill), aggregate 150 PRs into a categorised summary (Code Mode), then investigate the weird ones that don't fit your categories (tool-cli). One agent run, three modes of interaction, no friction at the seams.
 
-The tiers aren't competing implementations of the same idea. They're handling different shapes.
+They compose at the mechanical level too, not just the conceptual one. Code Mode is more useful when the sandbox has a writable filesystem and a couple of well-chosen CLIs on the path: large outputs land on disk instead of in the context window, and `jq` covers the long tail of shapes Code Mode shouldn't try to enumerate. A tool-cli running inside the same sandbox stops being a separate channel and just becomes another binary the generated code can shell out to. And once a skill has told the model that a capability exists, or once the model has discovered it for itself, it can reach for it in whatever context it's currently running in. The picture is less three doors and more an interlocking toolkit; the right door depends on what the model is trying to do at that moment.
+
+These aren't competing implementations of the same idea. They're handling different shapes, and they fit together.
 
 ## The headline thesis: it's cheap to ship all three
 
 Here's the argument I want to land more than any other. **It's actually pretty cheap for a harness to offer all these approaches at once, and their different properties do actually make them more helpful for different tasks, so it's worth considering seriously if progressive discovery of MCP should be solved in more than one way in production agent harnesses.**
 
-Roughly, what each tier costs a harness to add:
+Roughly, what each approach costs a harness to add:
 
 - **Skills** - one extra tool (`load_skill`), a `resources/list` call on connection to discover `skill://` resources, and a `defer_loading` hook (already first-class in [Anthropic's API](https://docs.claude.com/en/docs/agents-and-tools/tool-use/tool-search-tool) and [OpenAI's](https://platform.openai.com/docs/guides/tools-connectors-mcp), and trivially polyfillable elsewhere with a `tool_call` interceptor). The MCP server brings its own `skill://` payloads. There is no new spec dependency the client can't satisfy today.
 - **tool-cli** - a JSON-RPC server bound to `127.0.0.1` with a per-session shared secret, and a tiny CLI binary. Four methods (`listServers`, `listTools`, `describeTool`, `callTool`). The protocol is in [the tool-cli repo](https://github.com/SamMorrowDrums/tool-cli) and the npm package is roughly the size of a long weekend.
 - **Code Mode** - a sandbox you didn't write yourself ([isolated-vm](https://github.com/laverdet/isolated-vm), Workers isolates, [Anthropic's managed code execution](https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool), Pyodide, take your pick), an eligibility filter that whitelists `readOnlyHint: true` tools with `outputSchema`, and a callback bridge so `codemode.<tool>(...)` dispatches back through the same MCP client.
 
-Each of those, in isolation, is a couple of weeks of work for a competent engineer. None of them require spec changes that aren't already in flight. And the leverage compounds: the audit log, the human-in-the-loop hooks, the rate limiting, and the annotation checks all live in the same place regardless of which tier the model uses.
+Each of those, in isolation, is a couple of weeks of work for a competent engineer. None of them require spec changes that aren't already in flight. And the leverage compounds: the audit log, the human-in-the-loop hooks, the rate limiting, and the annotation checks all live in the same place regardless of which approach the model uses.
 
 The argument I keep hearing against doing all three is "we should just pick the best one." I'd push back hard on that. The "best one" is a function of the task, and an agent that has all three at hand is genuinely better at more tasks than one with any single strategy.
 
 ## One choke point still does the heavy lifting
 
-The reason the tiers compose cleanly is that all three route MCP calls back through the same harness:
+The reason these approaches compose cleanly is that all three route MCP calls back through the same harness:
 
 ```mermaid
 flowchart TD
     subgraph mcpi["mcpi (agent)"]
-        T1["load_skill<br/>(Tier 1 - Skills)"]
-        T2["tool-cli<br/>(Tier 2 - Football)"]
-        T3["code_search / code_execute<br/>(Tier 3 - Code Mode)"]
+        T1["load_skill<br/>(Skills)"]
+        T2["tool-cli<br/>(Football)"]
+        T3["code_search / code_execute<br/>(Code Mode)"]
         MCM["McpClientManager<br/>(MCP SDK)"]
         T1 --> MCM
         T2 --> MCM
@@ -59,9 +61,9 @@ flowchart TD
     MCM --> S2["MCP Server"]
 ```
 
-One audit trail. One place to add human-in-the-loop. One place to check tool annotations. One place to rate-limit. The model switches between tiers mid-task and the observability story doesn't change. Drop a `console.log` of every tool call in the harness's MCP client and you've covered all three tiers at once.
+One audit trail. One place to add human-in-the-loop. One place to check tool annotations. One place to rate-limit. The model switches between approaches mid-task and the observability story doesn't change. Drop a `console.log` of every tool call in the harness's MCP client and you've covered all three at once.
 
-This is the part of the design that matters most for production. It's also the part most competing implementations have skipped, because they bolt one tier on top of MCP rather than rewiring the harness to own MCP. Server-side Code Mode without harness routing is closer to `eval()` than to a real agent runtime. A skill system that bypasses the harness can't gate destructive tools. A CLI that opens its own MCP connections doesn't get the agent's audit log. The choke point is what makes the other arguments work.
+This is the part of the design that matters most for production. It's also the part most competing implementations have skipped, because they bolt one approach on top of MCP rather than rewiring the harness to own MCP. Server-side Code Mode without harness routing is closer to `eval()` than to a real agent runtime. A skill system that bypasses the harness can't gate destructive tools. A CLI that opens its own MCP connections doesn't get the agent's audit log. The choke point is what makes the other arguments work.
 
 ## Where the spec is, honestly
 
@@ -79,9 +81,27 @@ The spec is moving and it's worth being precise about what's settled and what is
 
 ## What I haven't measured yet
 
-I want to be honest about this: the design argument is the easy part. Numbers are coming. I'm working on evals comparing the three tiers (and combinations of them) against a baseline of "all tools loaded, no progressive discovery" on a fixed task set. If they land before too long, I'll add a follow-up post with the data. If they don't, I'll publish them as I have them. Don't take my word for any specific number until then.
+I want to be honest about this: the design argument is the easy part. Numbers are coming. I'm working on evals comparing the three approaches (and combinations of them) against a baseline of "all tools loaded, no progressive discovery" on a fixed task set. If they land before too long, I'll add a follow-up post with the data. If they don't, I'll publish them as I have them. Don't take my word for any specific number until then.
 
-What I'm confident about without evals is the directional argument: each tier reduces context for a different shape of work, the harness routing makes them safe to combine, and the cost of adding them is small enough that "ship all three" is the obvious answer for any harness that takes MCP seriously.
+What I'm confident about without evals is the directional argument: each approach reduces context for a different shape of work, the harness routing makes them safe to combine, and the cost of adding them is small enough that "ship all three" is the obvious answer for any harness that takes MCP seriously.
+
+## Where the rest of the field is
+
+The corollary to "I haven't measured everything" is "I haven't explored everything either." This space is moving fast and most of the most useful work is happening in parallel, sometimes by people who don't know they're working on the same problem. A few threads worth knowing about, with what I think each one moved forward and where I'd push them further.
+
+**Grouping has been tried in core three times.** Tool grouping isn't a new idea in MCP. Paul Carleton's [RFC #322 "Search"](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/322) tried it in April 2025. Tapan Chugh's [SEP-1292 "Namespaces using URIs"](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1292) tried it in August 2025. Cliff Hall's [SEP-1300 "Tool Filtering with Groups and Tags"](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1300) tried it the same month. All three closed in core. The work consolidated in [`experimental-ext-grouping`](https://github.com/modelcontextprotocol/experimental-ext-grouping), where the [Primitive Grouping IG](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1734) has the thread, with skills-as-groups the live draft. What the rejection history actually tells you isn't that grouping is wrong; it's that an abstraction has to land where it pays for itself. Skills-as-groups is the most concrete attempt so far because the grouping is something the model is motivated to use, not metadata that exists for its own sake. The open question is which parts earn their way from extension into core, and the right way to influence that is to comment on the draft.
+
+**The research has converged on calling this a context engineering problem, not a retrieval one.** [LiveMCPBench](https://arxiv.org/abs/2508.01780) (ICIP-CAS, 2025) is the empirical anchor: at 70 MCP servers and 527 tools, retrieval errors are nearly half of all agent failures. It made the size of the problem measurable in production conditions. What it didn't separate is whether the failures came from missing tools, mis-ranked tools, or correctly-ranked tools the model still couldn't compose. [A2X](https://arxiv.org/abs/2605.29270) (Virginia Tech, May 2026) names "LLM-native progressive disclosure" verbatim and ships an LLM-driven hierarchical taxonomy walked layer-by-layer at roughly a ninth of the prompt-token cost of dumping the full catalog. The taxonomy is constructed offline though, so the open question is how to keep it fresh as servers change. [Agent-as-a-Graph](https://arxiv.org/abs/2511.18194) (Lumer et al., Nov 2025) takes a different angle, building a knowledge graph over agents and their tools and traversing it at query time, evaluated on LiveMCPBench; the gain is real (Recall@5 up roughly 15 points) but it inherits the maintenance burden of any explicit graph. [BioManus](https://arxiv.org/abs/2606.04494) (June 2026) demonstrates the same idea for domain-specific MCP agents with typed heterogeneous graphs and sub-linear context footprint, which is the strongest empirical evidence so far that inter-tool relationship modelling pays off. [NESTFUL](https://aclanthology.org/2025.emnlp-main.1702/) (IBM Research, EMNLP 2025) is the honest counterweight: nested API sequencing is hard, even for frontier models, GPT-4o capping at 28% full-sequence accuracy. Hierarchy isn't free. And the design-pattern names are slowly settling: ["metadata-driven progressive disclosure"](https://arxiv.org/abs/2602.20867) in the SoK survey on agentic skills, ["Inter-Tool Relationship Declaration"](https://arxiv.org/abs/2602.18764) in Andreas Schlapbach's MCP × schema-guided dialogue paper. None of these are settled answers. They are directionally correct in a space that doesn't have a definitive one yet.
+
+It's worth being honest that a lot of the rest of the public MCP discourse isn't this. The "MCP vs CLI" content marketing genre largely recycles the same talking points (schemas bloat context, CLIs are familiar to models, MCP is good for governance) without distinguishing harness design from protocol design. Several "benchmark" posts I traced through turned out to be simulator runs or single-task comparisons dressed up as broad claims. The signal-to-noise here is real but the signal is small. The papers above are the ones I'd actually read, and the conversations in the IG meetings are where the next round of progress is being argued out, not on Substack.
+
+**Practitioners are converging on the same primitives independently.** [FastMCP's `SkillsProvider`](https://github.com/PrefectHQ/fastmcp) (jlowin) shipped skills served via MCP Resources before any formal spec, with lazy loading and metadata-first discovery; it's cited as the canonical existing implementation by [SEP-2640 (Agent Skills)](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2640). [pydantic-ai v1.105.0](https://github.com/pydantic/pydantic-ai) (June 2026) introduced `Capability(defer_loading=True, ...)` with a `load_capability` tool, reaching the same prompt-cache-preserving conclusion as mcpi's [Decision 008](https://github.com/SamMorrowDrums/mcpi-ext/blob/main/DECISIONS.md) by a different route. [OpenAI's Responses API](https://platform.openai.com/docs/guides/tools-connectors-mcp) shipped its own `defer_loading` for `gpt-5.4` and above, validating that the prompt-cache argument cuts across providers. Kun Chen's [AXI principles](https://github.com/kunchenguid/axi) (ex-Atlassian Rovo-Dev lead) name ten orthogonal things production CLIs should do better for agents: token-efficient output formats, minimal default schemas, pre-computed aggregates, contextual disclosure. That's the intra-tool design discipline the protocol-level discussions tend to skip past. None of these projects coordinated with each other or with mcpi. They converged because the constraints are real.
+
+The [github-mcp-server I help maintain](https://github.com/github/github-mcp-server) is shipping the same moves, in flight or merged: [CSV output for default list tools](https://github.com/github/github-mcp-server/pull/2450) (alongside JSON, to cut token cost on large pages), [structured outputs for read-only tools behind a flag](https://github.com/github/github-mcp-server/pull/2468), [granular issue tools behind `remote_mcp_issue_fields`](https://github.com/github/github-mcp-server/pull/2520) for agents that want finer-grained surfaces, [response-size reductions](https://github.com/github/github-mcp-server/pull/2563), and [`skill://` resource templates for Agent Skills discovery](https://github.com/github/github-mcp-server/pull/2129) in review. Some merged, some open, some gated behind insiders flags because different agents want different things. The actual lesson from running a real production server is that you can't pick a winner. The protocol's job is to make all of these strategies concurrently available so the harness, the model, and the server can negotiate what works for the task.
+
+**There's a related conversation about subagents that's the same problem in a different shape.** Subagents - [Claude Code's `dispatch_agent`](https://simonwillison.net/2025/Jun/2/claude-trace/) as reverse-engineered by Simon Willison via claude-trace, OpenAI Agents SDK's "agents as tools", Phil Schmid's [recent pattern guide](https://www.philschmid.de/use-mcp-servers) - are often cited as the parallel solution to context bloat. They're real and they're effective for clear, isolated tasks. But they don't save tokens. They shift them across separate context windows. The unsolved problem they share with MCP discovery is the same one in a different shape: what should the parent send the subagent, and what should come back, so you get the conclusion and the necessary data without bloat? Tool discovery is one fragment of a wider context-engineering problem the whole agent space keeps re-solving in different shapes. MCP isn't uniquely challenged. It's being explicit about a hard problem that everyone else is solving implicitly.
+
+I haven't exhaustively explored any of these directions, and I'd be suspicious of anyone who claims they have. Whatever the right combined answer turns out to be - graph-based traversal over typed hierarchies, skills-as-groups in the spec, defer-loading by default, server-side compression, subagent orchestration, intra-tool ergonomics, something we haven't named yet - it will feel obvious in hindsight. The way it arrives is the way it's already arriving: harness builders, server authors, spec contributors, and researchers iterating in public on the same problem, with the noise filtered out by people actually shipping the thing and seeing what holds up.
 
 ## What if we do none of this?
 
@@ -104,7 +124,7 @@ This is the part of the post I really wanted to write.
 
 [Mario was right](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/) that two MCP servers exposing 47 tools through 32k tokens of schema is a bad agent experience. He was right that pipelining and keeping transforms out of context is the issue that really matters. Where I disagree is the conclusion. The implementations that prompted his post weren't MCP failing. They were MCP being shipped without context engineering. With the harness doing real work, the same protocol gives you a far better agent than four bash scripts and a 225-token README, while preserving observability, annotations, and a real security story.
 
-Don't give up on MCP. The pieces are in the protocol, and the implementations are not difficult. If you ship one of the three tiers from this series this quarter, you will measurably improve your harness. If you ship all three, you will leapfrog every harness that picked one.
+Don't give up on MCP. The pieces are in the protocol, and the implementations are not difficult. If you ship one of the three approaches from this series this quarter, you will measurably improve your harness. If you ship all three, you will leapfrog every harness that picked one.
 
 ### If you build MCP servers
 

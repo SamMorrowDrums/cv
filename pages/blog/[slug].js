@@ -1,6 +1,10 @@
 import BlogPost from "../../components/BlogPost";
 import Layout from "../../components/Layout";
-import { getDocumentBySlug, getSlugs, blogDirectory } from "../../lib/api";
+import {
+  getDocumentBySlug,
+  getPublishedBlogPostSlugs,
+  blogDirectory,
+} from "../../lib/api";
 import markdownToHtml from "../../lib/markDownToHtml";
 import SEO from "../../components/SEO";
 import { getBlogPostMeta, extractFirstImage } from "../../lib/seo";
@@ -40,12 +44,12 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const slugs = getSlugs(blogDirectory);
+  const slugs = getPublishedBlogPostSlugs();
 
   return {
     paths: slugs.map((slug) => ({
       params: {
-        slug: slug.replace(/\.md$/, ""),
+        slug,
       },
     })),
     fallback: false,

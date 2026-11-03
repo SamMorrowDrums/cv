@@ -14,14 +14,26 @@ Universe itself was absolutely amazing to attend, so many people are building su
 
 I worked at the booth on day 2 which was a full sized diner, kitchen and speakeasy!
 
-![Four speakers recording a panel at GitHub Universe](/images/github-universe-2026/panel-recording.webp)
+![Four speakers recording the pre-universe livestream](/images/github-universe-2026/panel-recording.webp)
 
-![Group photo in front of the Figma Developer Meetup panel discussion screen](/images/github-universe-2026/figma-developer-meetup.webp)
+*Recording the pre-universe livestream*
 
-![Holding the MCP "Plugged In" record sleeve at GitHub Universe](/images/github-universe-2026/mcp-record-selfie.webp)
+![Attendees watching the MCP livestream broadcast on-site](/images/github-universe-2026/panel-broadcast.webp)
 
-![Attendees watching the GitHub Universe panel on a large screen](/images/github-universe-2026/panel-broadcast.webp)
+*MCP livestream broadcast on-site*
+
+![Group photo at the Figma MCP Panel on day 2](/images/github-universe-2026/figma-developer-meetup.webp)
+
+*Figma MCP Panel on day 2*
 
 ![The MCP "Plugged In" record sleeve in a wooden record display](/images/github-universe-2026/mcp-record-display.webp)
 
-![Developer-themed record sleeves beneath the Hi-Fi Code sign](/images/github-universe-2026/hi-fi-code-display.webp)
+*MCP record*
+
+![Holding the MCP "Plugged In" record sleeve at GitHub Universe](/images/github-universe-2026/mcp-record-selfie.webp)
+
+*Me holding the MCP record*
+
+![Developer-themed record sleeves at the Open Source Record Store](/images/github-universe-2026/hi-fi-code-display.webp)
+
+*Open Source Record Store*

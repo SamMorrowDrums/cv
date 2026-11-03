@@ -14,13 +14,13 @@ Universe itself was absolutely amazing to attend, so many people are building su
 
 I worked at the booth on day 2 which was a full sized diner, kitchen and speakeasy!
 
-![Four speakers recording the pre-universe livestream](/images/github-universe-2026/panel-recording.webp)
+![Four speakers recording the pre-keynote livestream](/images/github-universe-2026/panel-recording.webp)
 
-*Recording the pre-universe livestream*
+*Recording the pre-keynote livestream*
 
-![Attendees watching the MCP livestream broadcast on-site](/images/github-universe-2026/panel-broadcast.webp)
+![Attendees watching the livestream broadcast on-site](/images/github-universe-2026/panel-broadcast.webp)
 
-*MCP livestream broadcast on-site*
+*Livestream broadcast on-site*
 
 ![Group photo at the Figma MCP Panel on day 2](/images/github-universe-2026/figma-developer-meetup.webp)
 

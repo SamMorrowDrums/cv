@@ -8,8 +8,8 @@ on:
       - 'public/images/**'
       - 'scripts/generate-og-images.mjs'
       - 'scripts/generate-rss.mjs'
-      - 'lib/api.js'
-      - 'lib/seo.js'
+      - 'lib/api.mjs'
+      - 'lib/seo.mjs'
       - 'package.json'
       - 'package-lock.json'
   workflow_dispatch:

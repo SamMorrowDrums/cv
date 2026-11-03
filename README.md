@@ -19,6 +19,19 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Blog assets
+
+After adding or editing a post in `_blog`, generate its social images and RSS entry:
+
+```bash
+npm run generate-og-images
+npm run generate-rss
+```
+
+`npm run dev` does not generate these assets. `npm run build:export` runs both
+generators before exporting the site, and social-image generation errors stop
+the build rather than publishing pages with missing images.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

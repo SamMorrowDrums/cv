@@ -263,66 +263,41 @@ async function generateAllOGImages() {
     fs.mkdirSync(ogImagesDir, { recursive: true });
   }
   
-  try {
-    // Import the ES6 modules
-    const { getAllBlogPosts } = await import('../lib/api.mjs');
-    const { extractFirstImage } = await import('../lib/seo.mjs');
-    
-    // Get all blog posts
-    const blogPosts = getAllBlogPosts();
-    console.log(`Found ${blogPosts.length} blog posts`);
-    
-    // Generate images for each blog post
-    for (const post of blogPosts) {
-      const filenameRect = `${post.slug}.png`;
-      const filenameSquare = `${post.slug}-square.png`;
-      const outputPathRect = path.join(ogImagesDir, filenameRect);
-      const outputPathSquare = path.join(ogImagesDir, filenameSquare);
-      
-      try {
-        // Check if post has a content image
-        const contentImage = extractFirstImage(post.content);
-        
-        if (contentImage && !contentImage.startsWith('http')) {
-          // Use the content image, letterboxed to OG dimensions
-          const usedRect = await generateOGImageFromContent(contentImage, outputPathRect, 'rectangular');
-          const usedSquare = await generateOGImageFromContent(contentImage, outputPathSquare, 'square');
-          if (usedRect && usedSquare) continue;
-        }
-        
-        // Fallback to generated SVG OG image
-        await generateOGImage(post.title, outputPathRect, 'Blog Post', 'rectangular');
-        await generateOGImage(post.title, outputPathSquare, 'Blog Post', 'square');
-      } catch (error) {
-        console.warn(`Failed to generate OG images for ${post.slug}:`, error.message);
-      }
+  // Import the ES6 modules
+  const { getAllBlogPosts } = await import('../lib/api.mjs');
+  const { extractFirstImage } = await import('../lib/seo.mjs');
+
+  const blogPosts = getAllBlogPosts();
+  console.log(`Found ${blogPosts.length} blog posts`);
+
+  for (const post of blogPosts) {
+    const outputPathRect = path.join(ogImagesDir, `${post.slug}.png`);
+    const outputPathSquare = path.join(ogImagesDir, `${post.slug}-square.png`);
+    const contentImage = extractFirstImage(post.content);
+
+    if (contentImage && !contentImage.startsWith('http')) {
+      const usedRect = await generateOGImageFromContent(contentImage, outputPathRect, 'rectangular');
+      const usedSquare = await generateOGImageFromContent(contentImage, outputPathSquare, 'square');
+      if (usedRect && usedSquare) continue;
     }
-    
-    // Generate default images for static pages
-    try {
-      await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow', 'rectangular');
-      await generateOGImage('Blog', path.join(ogImagesDir, 'blog-square.png'), 'Sam Morrow', 'square');
-    } catch (error) {
-      console.warn('Failed to generate blog OG images:', error.message);
-    }
-    
-    try {
-      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic', 'rectangular');
-      await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home-square.png'), 'Drummer, software engineer and online-learning fanatic', 'square');
-    } catch (error) {
-      console.warn('Failed to generate home OG images:', error.message);
-    }
-    
-    console.log('OG image generation complete!');
-    
-  } catch (error) {
-    console.error('Error generating OG images:', error);
-    // Don't exit with error code - let the build continue
-    console.log('OG image generation failed, but continuing with build...');
+
+    // Fallback to generated SVG OG image
+    await generateOGImage(post.title, outputPathRect, 'Blog Post', 'rectangular');
+    await generateOGImage(post.title, outputPathSquare, 'Blog Post', 'square');
   }
+
+  await generateOGImage('Blog', path.join(ogImagesDir, 'blog.png'), 'Sam Morrow', 'rectangular');
+  await generateOGImage('Blog', path.join(ogImagesDir, 'blog-square.png'), 'Sam Morrow', 'square');
+  await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home.png'), 'Drummer, software engineer and online-learning fanatic', 'rectangular');
+  await generateOGImage('Sam Morrow', path.join(ogImagesDir, 'home-square.png'), 'Drummer, software engineer and online-learning fanatic', 'square');
+
+  console.log('OG image generation complete!');
 }
 
 // Run the script
-generateAllOGImages();
+generateAllOGImages().catch((error) => {
+  console.error('Error generating OG images:', error);
+  process.exitCode = 1;
+});
 
 export { generateAllOGImages, generateOGImage };

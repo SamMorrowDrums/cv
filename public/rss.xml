@@ -5,8 +5,15 @@
     <link>https://sam-morrow.com</link>
     <description>Drummer, software engineer and online-learning fanatic.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Nov 2026 12:07:05 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 13:40:01 GMT</lastBuildDate>
     <atom:link href="https://sam-morrow.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Connecting Copilot at GitHub Universe</title>
+      <link>https://sam-morrow.com/blog/connecting-copilot-at-github-universe</link>
+      <guid isPermaLink="true">https://sam-morrow.com/blog/connecting-copilot-at-github-universe</guid>
+      <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
+      <description>My team and I built a thing: GitHub Copilot Connectors...</description>
+    </item>
     <item>
       <title>Stop Multicasting Slop</title>
       <link>https://sam-morrow.com/blog/stop-multicasting-slop</link>

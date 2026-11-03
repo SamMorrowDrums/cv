@@ -2,6 +2,62 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
+const FONT_FAMILY = 'system-ui, -apple-system, sans-serif';
+
+function escapeXml(text) {
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const textWidthCache = new Map();
+
+// Measure rendered width with the build machine's fonts, which differ between
+// local, CI and Netlify, so wrapping never relies on guessed character widths.
+async function measureText(text, fontSize, fontWeight) {
+  const key = `${fontSize}:${fontWeight}:${text}`;
+  if (!textWidthCache.has(key)) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(fontSize * (text.length + 2))}" height="${fontSize * 2}"><text x="${fontSize}" y="${Math.round(fontSize * 1.4)}" font-family="${FONT_FAMILY}" font-size="${fontSize}" font-weight="${fontWeight}">${escapeXml(text)}</text></svg>`;
+    const { info } = await sharp(Buffer.from(svg)).trim().toBuffer({ resolveWithObject: true });
+    textWidthCache.set(key, info.width);
+  }
+  return textWidthCache.get(key);
+}
+
+async function wrapToWidth(text, fontSize, fontWeight, maxWidth) {
+  const lines = [];
+  let current = '';
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (!current || await measureText(candidate, fontSize, fontWeight) <= maxWidth) {
+      current = candidate;
+    } else {
+      lines.push(current);
+      current = word;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+// Use the largest title size that fits the whole title within the square.
+async function fitSquareTitle(title, maxWidth) {
+  const sizes = [128, 112, 100, 88, 80, 72];
+  const maxLines = 4;
+  for (const fontSize of sizes) {
+    const lines = await wrapToWidth(title, fontSize, 900, maxWidth);
+    const widths = await Promise.all(lines.map((line) => measureText(line, fontSize, 900)));
+    if (lines.length <= maxLines && widths.every((width) => width <= maxWidth)) {
+      return { lines, fontSize };
+    }
+  }
+  const fontSize = sizes[sizes.length - 1];
+  const lines = await wrapToWidth(title, fontSize, 900, maxWidth);
+  if (lines.length > maxLines + 1) {
+    lines.length = maxLines + 1;
+    lines[maxLines] += '…';
+  }
+  return { lines, fontSize };
+}
+
 // Helper function to wrap text intelligently for OpenGraph images
 function wrapTitle(title, format = 'rectangular', maxLines = 2) {
   // Adjust character limits based on format - more characters for rectangular format
@@ -55,39 +111,71 @@ function wrapTitle(title, format = 'rectangular', maxLines = 2) {
   return lines.filter(line => line.length > 0);
 }
 
+// Lay out the square image with the full title as large as space allows.
+async function getSquareLayout(title, subtitle) {
+  const maxWidth = 1000;
+  const { lines, fontSize } = await fitSquareTitle(title, maxWidth);
+  const lineHeight = Math.round(fontSize * 1.1);
+
+  let subtitleFontSize = 44;
+  const subtitleWidth = await measureText(subtitle, subtitleFontSize, 400);
+  if (subtitleWidth > maxWidth) {
+    subtitleFontSize = Math.floor(subtitleFontSize * maxWidth / subtitleWidth);
+  }
+
+  // Centre the title and subtitle between the top edge and the author footer.
+  const subtitleGap = Math.round(fontSize * 0.35) + subtitleFontSize;
+  const blockHeight = Math.round(fontSize * 0.75) + (lines.length - 1) * lineHeight + subtitleGap;
+  const regionTop = 100;
+  const regionHeight = 860;
+  const titleStartY = Math.round(regionTop + (regionHeight - blockHeight) / 2 + fontSize * 0.75);
+
+  return {
+    titleLines: lines,
+    titleFontSize: fontSize,
+    lineHeight,
+    titleStartY,
+    subtitleY: titleStartY + (lines.length - 1) * lineHeight + subtitleGap,
+    subtitleFontSize,
+    authorY: 1040,
+    authorFontSize: 40,
+    descY: 1090,
+    descFontSize: 28,
+  };
+}
+
 // Generate SVG for OG image
-function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular') {
+async function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular') {
   // Determine dimensions based on format
   const isSquare = format === 'square';
   const width = 1200;
   const height = isSquare ? 1200 : 630;
   
-  // Wrap the title intelligently based on format
-  const titleLines = wrapTitle(title, format);
-  const isMultiLine = titleLines.length > 1;
-  
-  // Adjust positioning and sizing based on format and number of lines
-  let titleStartY, subtitleY, titleFontSize, authorY, descY;
-  
+  let layout;
   if (isSquare) {
-    // Square format positioning - more vertical space
-    titleStartY = isMultiLine ? 320 : 400;
-    subtitleY = isMultiLine ? 520 : 480;
-    titleFontSize = isMultiLine ? 64 : 72;
-    authorY = 720;
-    descY = 760;
+    layout = await getSquareLayout(title, subtitle);
   } else {
     // Rectangular format positioning - same as before
-    titleStartY = isMultiLine ? 240 : 280;
-    subtitleY = isMultiLine ? 380 : 350;
-    titleFontSize = 72;
-    authorY = 520;
-    descY = 560;
+    const titleLines = wrapTitle(title, format);
+    const isMultiLine = titleLines.length > 1;
+    layout = {
+      titleLines,
+      titleFontSize: 72,
+      lineHeight: 80,
+      titleStartY: isMultiLine ? 240 : 280,
+      subtitleY: isMultiLine ? 380 : 350,
+      subtitleFontSize: 32,
+      authorY: 520,
+      authorFontSize: 28,
+      descY: 560,
+      descFontSize: 20,
+    };
   }
+  const { titleLines, titleFontSize, lineHeight, titleStartY, subtitleY, subtitleFontSize, authorY, authorFontSize, descY, descFontSize } = layout;
   
   // Generate title text elements
   const titleElements = titleLines.map((line, index) => 
-    `<text x="100" y="${titleStartY + (index * (titleFontSize + 8))}" font-family="system-ui, -apple-system, sans-serif" font-size="${titleFontSize}" font-weight="900" fill="url(#text)">${line}</text>`
+    `<text x="100" y="${titleStartY + (index * lineHeight)}" font-family="${FONT_FAMILY}" font-size="${titleFontSize}" font-weight="900" fill="url(#text)">${escapeXml(line)}</text>`
   ).join('\n      ');
   
   // Adjust decorative elements for square format - minimal elements for smaller file size
@@ -128,17 +216,17 @@ function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular') {
       ${titleElements}
       
       <!-- Subtitle -->
-      <text x="100" y="${subtitleY}" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#94a3b8">
-        ${subtitle}
+      <text x="100" y="${subtitleY}" font-family="${FONT_FAMILY}" font-size="${subtitleFontSize}" fill="#94a3b8">
+        ${escapeXml(subtitle)}
       </text>
       
       <!-- Author -->
-      <text x="100" y="${authorY}" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#e2e8f0">
+      <text x="100" y="${authorY}" font-family="${FONT_FAMILY}" font-size="${authorFontSize}" font-weight="600" fill="#e2e8f0">
         Sam Morrow
       </text>
       
       <!-- Description -->
-      <text x="100" y="${descY}" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8">
+      <text x="100" y="${descY}" font-family="${FONT_FAMILY}" font-size="${descFontSize}" fill="#94a3b8">
         Drummer, software engineer and online-learning fanatic
       </text>
     </svg>
@@ -148,7 +236,7 @@ function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular') {
 // Generate OG image and save to file
 async function generateOGImage(title, outputPath, subtitle = 'Blog Post', format = 'rectangular') {
   try {
-    const svg = generateSVG(title, subtitle, format);
+    const svg = await generateSVG(title, subtitle, format);
     const isSquare = format === 'square';
     
     // Convert SVG to PNG using Sharp with optimization

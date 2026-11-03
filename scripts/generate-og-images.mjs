@@ -38,10 +38,33 @@ async function wrapToWidth(text, fontSize, fontWeight, maxWidth) {
   return lines;
 }
 
-// Use the largest title size that fits the whole title within the square.
-async function fitSquareTitle(title, maxWidth) {
-  const sizes = [128, 112, 100, 88, 80, 72];
-  const maxLines = 4;
+const LAYOUTS = {
+  square: {
+    titleSizes: [128, 112, 100, 88, 80, 72],
+    maxLines: 4,
+    subtitleFontSize: 44,
+    regionTop: 100,
+    regionHeight: 860,
+    authorY: 1040,
+    authorFontSize: 40,
+    descY: 1090,
+    descFontSize: 28,
+  },
+  rectangular: {
+    titleSizes: [72, 64, 56],
+    maxLines: 3,
+    subtitleFontSize: 32,
+    regionTop: 50,
+    regionHeight: 420,
+    authorY: 520,
+    authorFontSize: 28,
+    descY: 560,
+    descFontSize: 20,
+  },
+};
+
+// Use the largest title size that fits the whole title within the image.
+async function fitTitle(title, sizes, maxLines, maxWidth) {
   for (const fontSize of sizes) {
     const lines = await wrapToWidth(title, fontSize, 900, maxWidth);
     const widths = await Promise.all(lines.map((line) => measureText(line, fontSize, 900)));
@@ -51,73 +74,21 @@ async function fitSquareTitle(title, maxWidth) {
   }
   const fontSize = sizes[sizes.length - 1];
   const lines = await wrapToWidth(title, fontSize, 900, maxWidth);
-  if (lines.length > maxLines + 1) {
-    lines.length = maxLines + 1;
-    lines[maxLines] += '…';
+  if (lines.length > maxLines) {
+    lines.length = maxLines;
+    lines[maxLines - 1] += '…';
   }
   return { lines, fontSize };
 }
 
-// Helper function to wrap text intelligently for OpenGraph images
-function wrapTitle(title, format = 'rectangular', maxLines = 2) {
-  // Adjust character limits based on format - more characters for rectangular format
-  const maxCharsPerLine = format === 'square' ? 12 : 18;
-  
-  if (!title || title.length <= maxCharsPerLine) {
-    return [title || ''];
-  }
-
-  const words = title.split(' ');
-  const lines = [];
-  let currentLine = '';
-
-  for (const word of words) {
-    const testLine = currentLine ? `${currentLine} ${word}` : word;
-    
-    if (testLine.length <= maxCharsPerLine) {
-      currentLine = testLine;
-    } else {
-      if (currentLine) {
-        lines.push(currentLine);
-        currentLine = word;
-      } else {
-        // Word is longer than max chars, truncate it
-        lines.push(word.substring(0, maxCharsPerLine - 3) + '...');
-        currentLine = '';
-      }
-      
-      // Stop if we've reached max lines
-      if (lines.length >= maxLines) {
-        break;
-      }
-    }
-  }
-  
-  // Add remaining text to last line
-  if (currentLine && lines.length < maxLines) {
-    lines.push(currentLine);
-  }
-  
-  // If we have remaining words and are at max lines, truncate last line
-  if (lines.length === maxLines && (currentLine || words.length > 0)) {
-    const lastLine = lines[lines.length - 1];
-    if (lastLine.length > maxCharsPerLine - 3) {
-      lines[lines.length - 1] = lastLine.substring(0, maxCharsPerLine - 3) + '...';
-    } else if (!lastLine.endsWith('...')) {
-      lines[lines.length - 1] = lastLine + '...';
-    }
-  }
-  
-  return lines.filter(line => line.length > 0);
-}
-
-// Lay out the square image with the full title as large as space allows.
-async function getSquareLayout(title, subtitle) {
+// Lay out the full title as large as space allows.
+async function getLayout(title, subtitle, format) {
+  const config = LAYOUTS[format];
   const maxWidth = 1000;
-  const { lines, fontSize } = await fitSquareTitle(title, maxWidth);
+  const { lines, fontSize } = await fitTitle(title, config.titleSizes, config.maxLines, maxWidth);
   const lineHeight = Math.round(fontSize * 1.1);
 
-  let subtitleFontSize = 44;
+  let subtitleFontSize = config.subtitleFontSize;
   const subtitleWidth = await measureText(subtitle, subtitleFontSize, 400);
   if (subtitleWidth > maxWidth) {
     subtitleFontSize = Math.floor(subtitleFontSize * maxWidth / subtitleWidth);
@@ -126,9 +97,7 @@ async function getSquareLayout(title, subtitle) {
   // Centre the title and subtitle between the top edge and the author footer.
   const subtitleGap = Math.round(fontSize * 0.35) + subtitleFontSize;
   const blockHeight = Math.round(fontSize * 0.75) + (lines.length - 1) * lineHeight + subtitleGap;
-  const regionTop = 100;
-  const regionHeight = 860;
-  const titleStartY = Math.round(regionTop + (regionHeight - blockHeight) / 2 + fontSize * 0.75);
+  const titleStartY = Math.round(config.regionTop + (config.regionHeight - blockHeight) / 2 + fontSize * 0.75);
 
   return {
     titleLines: lines,
@@ -137,10 +106,10 @@ async function getSquareLayout(title, subtitle) {
     titleStartY,
     subtitleY: titleStartY + (lines.length - 1) * lineHeight + subtitleGap,
     subtitleFontSize,
-    authorY: 1040,
-    authorFontSize: 40,
-    descY: 1090,
-    descFontSize: 28,
+    authorY: config.authorY,
+    authorFontSize: config.authorFontSize,
+    descY: config.descY,
+    descFontSize: config.descFontSize,
   };
 }
 
@@ -151,26 +120,7 @@ async function generateSVG(title, subtitle = 'Blog Post', format = 'rectangular'
   const width = 1200;
   const height = isSquare ? 1200 : 630;
   
-  let layout;
-  if (isSquare) {
-    layout = await getSquareLayout(title, subtitle);
-  } else {
-    // Rectangular format positioning - same as before
-    const titleLines = wrapTitle(title, format);
-    const isMultiLine = titleLines.length > 1;
-    layout = {
-      titleLines,
-      titleFontSize: 72,
-      lineHeight: 80,
-      titleStartY: isMultiLine ? 240 : 280,
-      subtitleY: isMultiLine ? 380 : 350,
-      subtitleFontSize: 32,
-      authorY: 520,
-      authorFontSize: 28,
-      descY: 560,
-      descFontSize: 20,
-    };
-  }
+  const layout = await getLayout(title, subtitle, isSquare ? 'square' : 'rectangular');
   const { titleLines, titleFontSize, lineHeight, titleStartY, subtitleY, subtitleFontSize, authorY, authorFontSize, descY, descFontSize } = layout;
   
   // Generate title text elements

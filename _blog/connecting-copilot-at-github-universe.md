@@ -26,6 +26,10 @@ I worked at the booth on day 2 which was a full sized diner, kitchen and speakea
 
 *Figma MCP Panel on day 2*
 
+![Developer-themed record sleeves at the Open Source Record Store](/images/github-universe-2026/hi-fi-code-display.webp)
+
+*Open Source Record Store*
+
 ![The MCP "Plugged In" record sleeve in a wooden record display](/images/github-universe-2026/mcp-record-display.webp)
 
 *MCP record*
@@ -33,7 +37,3 @@ I worked at the booth on day 2 which was a full sized diner, kitchen and speakea
 ![Holding the MCP "Plugged In" record sleeve at GitHub Universe](/images/github-universe-2026/mcp-record-selfie.webp)
 
 *Me holding the MCP record*
-
-![Developer-themed record sleeves at the Open Source Record Store](/images/github-universe-2026/hi-fi-code-display.webp)
-
-*Open Source Record Store*
